@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.service.processors.B2BProcessor;
+import org.example.service.processors.B2ClProcessor;
 import org.example.service.processors.Gst1ReportProcessor;
 import org.example.util.Constants;
 
@@ -18,6 +19,7 @@ public class ExcelProcessorFactory {
     static {
         processorMap.put(Constants.GstR1Sheet, new Gst1ReportProcessor());
         processorMap.put(Constants.B2BSheet, new B2BProcessor());
+        processorMap.put(Constants.B2ClSheet, new B2ClProcessor());
     }
 
     public static IExcelProcessor getExcelProcessor(int index) throws Exception {
