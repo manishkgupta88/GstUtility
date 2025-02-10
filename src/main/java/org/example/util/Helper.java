@@ -23,4 +23,9 @@ public class Helper {
         return NumberUtils.toDouble(str, 0.0);
     }
 
+    public static int getCellValueAsInt(Cell cell) {
+        Double val = getCellValueAsDouble(cell);
+        return val.intValue();
+    }
+
 }

@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.service.processors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
@@ -7,6 +7,7 @@ import org.example.model.DataPair;
 import org.example.model.GstR1Report;
 import org.example.model.GstSheet;
 import org.example.model.InvoiceRecord;
+import org.example.service.IExcelProcessor;
 import org.example.util.Helper;
 
 import java.util.ArrayList;
@@ -21,6 +22,9 @@ public class Gst1ReportProcessor implements IExcelProcessor {
 
     @Override
     public GstSheet read(Sheet sheet) {
+        if (sheet == null) {
+            return null;
+        }
         Iterator<Row> itr = sheet.iterator();
         GstR1Report gstR1Report = new GstR1Report();
         int rc = 0;

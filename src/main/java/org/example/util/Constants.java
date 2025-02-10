@@ -7,5 +7,6 @@ package org.example.util;
 public interface Constants {
     int MaxSheets = 12;
     int GstR1Sheet = 0;
+    int B2BSheet = 1;
 
 }
