@@ -13,14 +13,20 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
-public class B2csSheet implements GstSheet {
+public class CdnrSheet implements GstSheet {
 
     @Serial
     private static final long serialVersionUID = 6962105547943529654L;
-    private DataPair title;
+    private DataPair recipients;
+    private DataPair notes;
+    private DataPair noteValue;
     private DataPair taxableValue;
     private DataPair totalCess;
+    private DataPair title;
+    private int numOfRecipients;
+    private int numOfNotes;
+    private Double totalNoteValue;
     private Double totalTaxableValue;
     private Double totalCessAmount;
-    private List<B2csRecord> b2csRecords;
+    private List<CdnrRecord> records;
 }

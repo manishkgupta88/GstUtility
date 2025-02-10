@@ -18,11 +18,11 @@ public class B2BSheet implements GstSheet {
     @Serial
     private static final long serialVersionUID = 6962105547943529654L;
     private DataPair title;
-    DataPair recipients;
-    DataPair invoices;
-    DataPair invoiceValue;
-    DataPair taxableValue;
-    DataPair totalCess;
+    private DataPair recipients;
+    private DataPair invoices;
+    private DataPair invoiceValue;
+    private DataPair taxableValue;
+    private DataPair totalCess;
     private int numOfRecipients;
     private int numOfInvoices;
     private Double totalInvoiceValue;
