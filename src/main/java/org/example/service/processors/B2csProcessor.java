@@ -24,12 +24,12 @@ public class B2csProcessor implements IExcelProcessor {
             return null;
         }
         Iterator<Row> itr = sheet.iterator();
-        B2csSheet b2csSheet = new B2csSheet();
+        B2csSheet sheetObj = new B2csSheet();
         int rc = 0;
         while (itr.hasNext()) {
             ++rc;
             Row row = itr.next();
-            parseRow(rc, row, b2csSheet);
+            parseRow(rc, row, sheetObj);
             if (rc == 4) {
                 break;
             }
@@ -41,8 +41,8 @@ public class B2csProcessor implements IExcelProcessor {
             B2csRecord invoice = parseInvoiceRow(row);
             invoiceRecords.add(invoice);
         }
-        b2csSheet.setB2csRecords(invoiceRecords);
-        return b2csSheet;
+        sheetObj.setB2csRecords(invoiceRecords);
+        return sheetObj;
     }
 
     private B2csRecord parseInvoiceRow(Row row) {

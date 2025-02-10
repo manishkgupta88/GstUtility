@@ -20,6 +20,7 @@ public class ExcelProcessorFactory {
         processorMap.put(Constants.B2ClSheet, new B2ClProcessor());
         processorMap.put(Constants.B2csSheet, new B2csProcessor());
         processorMap.put(Constants.CdnrSheet, new CdnrProcessor());
+        processorMap.put(Constants.CdnurSheet, new CdnurProcessor());
     }
 
     public static IExcelProcessor getExcelProcessor(int index) throws Exception {
