@@ -8,6 +8,8 @@ import org.example.model.GstSheet;
 import org.example.util.Constants;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User : Manish K. Gupta
@@ -25,6 +27,7 @@ public class ExcelConsolidator {
             System.out.println("Folder path does not exist");
             return;
         }
+        System.out.println("Folder " + folder.getPath() + "accessed and read");
         executeFiles(folder);
     }
 
@@ -32,20 +35,28 @@ public class ExcelConsolidator {
         try {
             int fileCount = 0;
             for (int i = 0; i < Constants.MaxSheets; i++) {
+                IExcelProcessor processor = ExcelProcessorFactory.getExcelProcessor(i);
                 fileCount = 0;
+                List<GstSheet> objs = new ArrayList<>();
                 for (File file : folder.listFiles()) {
+                    if (!file.getName().endsWith("xls") && !file.getName().endsWith("xlsx")) {
+                        System.out.println("Skipping file: " + file.getName());
+                        continue;
+                    }
                     ++fileCount;
                     Workbook workbook = new XSSFWorkbook(file);
                     Sheet sheet = workbook.getSheetAt(i);
                     System.out.println("Processing sheet: '" + sheet.getSheetName() + "' from file: '" + file.getName() + "'");
-                    IExcelProcessor processor = ExcelProcessorFactory.getExcelProcessor(i);
                     if (processor == null) {
                         System.out.println("Could not find processor for sheet: " + sheet.getSheetName());
                         throw new Exception("Processor not found");
                     }
                     GstSheet gstSheet = processor.read(sheet);
-                    processor.write(folder.getParent(), gstSheet, fileCount == 1);
+                    if (gstSheet != null) {
+                        objs.add(gstSheet);
+                    }
                 }
+                processor.write(folder.getParent(), objs, fileCount == 1);
             }
         } catch (Exception e) {
             System.out.print("Error reading files");

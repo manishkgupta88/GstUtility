@@ -4,10 +4,10 @@ import org.example.service.ExcelConsolidator;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
+public class Trigger {
     public static void main(String[] args) {
-        String folderPath = "C:\\Users\\guptamanis\\Desktop\\gst\\files";
-        ExcelConsolidator reader = new ExcelConsolidator();
-        reader.consolidate(folderPath);
+        String folderPath = "Q:\\src\\intellij\\GstUtility\\src\\resources\\gst\\files";
+        ExcelConsolidator consolidator = new ExcelConsolidator();
+        consolidator.consolidate(folderPath);
     }
 }
