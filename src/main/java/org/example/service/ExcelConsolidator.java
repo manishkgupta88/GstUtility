@@ -34,7 +34,7 @@ public class ExcelConsolidator {
     private void executeFiles(File folder) {
         try {
             int fileCount = 0;
-            for (int i = 1; i < Constants.MaxSheets; i++) {
+            for (int i = 3; i < Constants.MaxSheets; i++) {
                 IExcelProcessor processor = ExcelProcessorFactory.getExcelProcessor(i);
                 fileCount = 0;
                 List<GstSheet> objs = new ArrayList<>();

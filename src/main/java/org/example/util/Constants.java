@@ -9,5 +9,6 @@ public interface Constants {
     int GstR1Sheet = 0;
     int B2BSheet = 1;
     int B2ClSheet = 2;
+    int B2csSheet = 3;
 
 }
