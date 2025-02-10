@@ -22,7 +22,7 @@ public class GstR1Report implements GstSheet {
     private DataPair tradeName;
     private DataPair aggregateTurnoverOfPrecedingFinancialYear;
     private DataPair aggregateTurnover;
-    private List<InvoiceRecord> invoiceRecords;
+    private List<InvoiceRecord> records;
     private Double totalInvoiceValue;
     private Double totalTaxableValue;
     private Double totalTaxAmount;

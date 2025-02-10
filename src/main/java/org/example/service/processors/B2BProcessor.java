@@ -24,30 +24,30 @@ public class B2BProcessor implements IExcelProcessor {
             return null;
         }
         Iterator<Row> itr = sheet.iterator();
-        B2BSheet b2bSheet = new B2BSheet();
+        B2BSheet sheetObj = new B2BSheet();
         int rc = 0;
         while (itr.hasNext()) {
             ++rc;
             Row row = itr.next();
-            parseRow(rc, row, b2bSheet);
+            parseRow(rc, row, sheetObj);
             if (rc == 4) {
                 break;
             }
         }
-        List<B2BInvoice> invoiceRecords = new ArrayList<>();
+        List<B2BInvoice> records = new ArrayList<>();
         Row row = null;
         while (itr.hasNext()) {
             row = itr.next();
-            B2BInvoice invoice = parseInvoiceRow(row);
-            invoiceRecords.add(invoice);
+            B2BInvoice record = parseInvoiceRow(row);
+            records.add(record);
         }
-        b2bSheet.setInvoiceRecords(invoiceRecords);
-        return b2bSheet;
+        sheetObj.setRecords(records);
+        return sheetObj;
     }
 
     private B2BInvoice parseInvoiceRow(Row row) {
-        B2BInvoice invoice = new B2BInvoice();
-        invoice.setGstin(Helper.getCellValueAsString(row.getCell(0)))
+        B2BInvoice record = new B2BInvoice();
+        record.setGstin(Helper.getCellValueAsString(row.getCell(0)))
                 .setPartyName(Helper.getCellValueAsString(row.getCell(1)))
                 .setInvoiceNo(Helper.getCellValueAsString(row.getCell(2)))
                 .setInvoiceDate(Helper.getCellValueAsString(row.getCell(3)))
@@ -60,7 +60,7 @@ public class B2BProcessor implements IExcelProcessor {
                 .setTaxRate(Helper.getCellValueAsString(row.getCell(10)))
                 .setTaxableValue(Helper.getCellValueAsString(row.getCell(11)))
                 .setCessAmount(Helper.getCellValueAsString(row.getCell(12)));
-        return invoice;
+        return record;
     }
 
     private void parseRow(int rc, Row row, B2BSheet b2bSheet) {

@@ -26,5 +26,5 @@ public class B2ClSheet implements GstSheet {
     private Double totalInvoiceValue;
     private Double totalTaxableValue;
     private Double totalCessAmount;
-    private List<B2ClInvoice> invoiceRecords;
+    private List<B2ClInvoice> records;
 }

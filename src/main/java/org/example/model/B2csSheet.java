@@ -22,5 +22,5 @@ public class B2csSheet implements GstSheet {
     private DataPair totalCess;
     private Double totalTaxableValue;
     private Double totalCessAmount;
-    private List<B2csRecord> b2csRecords;
+    private List<B2csRecord> records;
 }

@@ -13,20 +13,14 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
-public class B2BSheet implements GstSheet {
+public class AtSheet implements GstSheet {
 
     @Serial
     private static final long serialVersionUID = 6962105547943529654L;
     private DataPair title;
-    private DataPair recipients;
-    private DataPair invoices;
-    private DataPair invoiceValue;
-    private DataPair taxableValue;
+    private DataPair advanceTax;
     private DataPair totalCess;
-    private int numOfRecipients;
-    private int numOfInvoices;
-    private Double totalInvoiceValue;
-    private Double totalTaxableValue;
+    private Double totalAdvanceValue;
     private Double totalCessAmount;
-    private List<B2BInvoice> records;
+    private List<AtRecord> records;
 }

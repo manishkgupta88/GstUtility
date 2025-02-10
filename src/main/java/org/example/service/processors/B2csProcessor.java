@@ -34,27 +34,27 @@ public class B2csProcessor implements IExcelProcessor {
                 break;
             }
         }
-        List<B2csRecord> invoiceRecords = new ArrayList<>();
+        List<B2csRecord> records = new ArrayList<>();
         Row row = null;
         while (itr.hasNext()) {
             row = itr.next();
-            B2csRecord invoice = parseInvoiceRow(row);
-            invoiceRecords.add(invoice);
+            B2csRecord record = parseInvoiceRow(row);
+            records.add(record);
         }
-        sheetObj.setB2csRecords(invoiceRecords);
+        sheetObj.setRecords(records);
         return sheetObj;
     }
 
     private B2csRecord parseInvoiceRow(Row row) {
-        B2csRecord invoice = new B2csRecord();
-        invoice.setType(Helper.getCellValueAsString(row.getCell(0)))
+        B2csRecord record = new B2csRecord();
+        record.setType(Helper.getCellValueAsString(row.getCell(0)))
                 .setPlaceOfSupply(Helper.getCellValueAsString(row.getCell(1)))
                 .setApplicableTaxRate(Helper.getCellValueAsString(row.getCell(2)))
                 .setTaxRate(Helper.getCellValueAsString(row.getCell(3)))
                 .setTaxableValue(Helper.getCellValueAsString(row.getCell(4)))
                 .setCessAmount(Helper.getCellValueAsString(row.getCell(5)))
                 .setEcommGstin(Helper.getCellValueAsString(row.getCell(6)));
-        return invoice;
+        return record;
     }
 
     private void parseRow(int rc, Row row, B2csSheet b2clSheet) {

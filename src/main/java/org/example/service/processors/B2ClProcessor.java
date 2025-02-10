@@ -24,30 +24,30 @@ public class B2ClProcessor implements IExcelProcessor {
             return null;
         }
         Iterator<Row> itr = sheet.iterator();
-        B2ClSheet b2clSheet = new B2ClSheet();
+        B2ClSheet sheetObj = new B2ClSheet();
         int rc = 0;
         while (itr.hasNext()) {
             ++rc;
             Row row = itr.next();
-            parseRow(rc, row, b2clSheet);
+            parseRow(rc, row, sheetObj);
             if (rc == 4) {
                 break;
             }
         }
-        List<B2ClInvoice> invoiceRecords = new ArrayList<>();
+        List<B2ClInvoice> records = new ArrayList<>();
         Row row = null;
         while (itr.hasNext()) {
             row = itr.next();
-            B2ClInvoice invoice = parseInvoiceRow(row);
-            invoiceRecords.add(invoice);
+            B2ClInvoice record = parseInvoiceRow(row);
+            records.add(record);
         }
-        b2clSheet.setInvoiceRecords(invoiceRecords);
-        return b2clSheet;
+        sheetObj.setRecords(records);
+        return sheetObj;
     }
 
     private B2ClInvoice parseInvoiceRow(Row row) {
-        B2ClInvoice invoice = new B2ClInvoice();
-        invoice.setInvoiceNo(Helper.getCellValueAsString(row.getCell(0)))
+        B2ClInvoice record = new B2ClInvoice();
+        record.setInvoiceNo(Helper.getCellValueAsString(row.getCell(0)))
                 .setInvoiceDate(Helper.getCellValueAsString(row.getCell(1)))
                 .setInvoiceValue(Helper.getCellValueAsString(row.getCell(2)))
                 .setPlaceOfSupply(Helper.getCellValueAsString(row.getCell(3)))
@@ -56,7 +56,7 @@ public class B2ClProcessor implements IExcelProcessor {
                 .setTaxableValue(Helper.getCellValueAsString(row.getCell(6)))
                 .setCessAmount(Helper.getCellValueAsString(row.getCell(7)))
                 .setEcommGstin(Helper.getCellValueAsString(row.getCell(8)));
-        return invoice;
+        return record;
     }
 
     private void parseRow(int rc, Row row, B2ClSheet b2clSheet) {

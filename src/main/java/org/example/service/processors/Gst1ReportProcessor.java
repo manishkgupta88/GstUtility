@@ -26,33 +26,33 @@ public class Gst1ReportProcessor implements IExcelProcessor {
             return null;
         }
         Iterator<Row> itr = sheet.iterator();
-        GstR1Report gstR1Report = new GstR1Report();
+        GstR1Report sheetObj = new GstR1Report();
         int rc = 0;
         while (itr.hasNext()) {
             ++rc;
             Row row = itr.next();
-            parseRow(rc, row, gstR1Report);
+            parseRow(rc, row, sheetObj);
             if (rc == 7) {
                 break;
             }
         }
-        List<InvoiceRecord> invoiceRecords = new ArrayList<>();
+        List<InvoiceRecord> records = new ArrayList<>();
         Row row = null;
         while (itr.hasNext()) {
             row = itr.next();
-            InvoiceRecord invoice = parseInvoiceRow(row);
-            if (StringUtils.isEmpty(invoice.getPartyName())) {
+            InvoiceRecord record = parseInvoiceRow(row);
+            if (StringUtils.isEmpty(record.getPartyName())) {
                 break;
             }
-            invoiceRecords.add(invoice);
+            records.add(record);
         }
-        gstR1Report.setInvoiceRecords(invoiceRecords);
-        parseTotalRow(gstR1Report, row);
-        return gstR1Report;
+        sheetObj.setRecords(records);
+        parseTotalRow(sheetObj, row);
+        return sheetObj;
     }
 
-    private void parseTotalRow(GstR1Report gstR1Report, Row row) {
-        gstR1Report
+    private void parseTotalRow(GstR1Report sheetObj, Row row) {
+        sheetObj
                 .setTotalInvoiceValue(Helper.getCellValueAsDouble(row.getCell(5)))
                 .setTotalTaxableValue(Helper.getCellValueAsDouble(row.getCell(8)))
                 .setTotalTaxAmount(Helper.getCellValueAsDouble(row.getCell(10)))
@@ -62,8 +62,8 @@ public class Gst1ReportProcessor implements IExcelProcessor {
     }
 
     private InvoiceRecord parseInvoiceRow(Row row) {
-        InvoiceRecord invoice = new InvoiceRecord();
-        invoice.setGstin(Helper.getCellValueAsString(row.getCell(0)))
+        InvoiceRecord record = new InvoiceRecord();
+        record.setGstin(Helper.getCellValueAsString(row.getCell(0)))
                 .setPartyName(Helper.getCellValueAsString(row.getCell(1)))
                 .setTransactionType(Helper.getCellValueAsString(row.getCell(2)))
                 .setInvoiceNo(Helper.getCellValueAsString(row.getCell(3)))
@@ -78,40 +78,40 @@ public class Gst1ReportProcessor implements IExcelProcessor {
                 .setStateTaxAmount(Helper.getCellValueAsString(row.getCell(12)))
                 .setCessAmount(Helper.getCellValueAsString(row.getCell(13)))
                 .setPlaceOfSupply(Helper.getCellValueAsString(row.getCell(14)));
-        return invoice;
+        return record;
     }
 
-    private void parseRow(int rc, Row row, GstR1Report gstR1Report) {
+    private void parseRow(int rc, Row row, GstR1Report sheetObj) {
         switch (rc) {
             case 1:
                 DataPair period =
                         new DataPair().setLabel(Helper.getCellValueAsString(row.getCell(0))).setValue(Helper.getCellValueAsString(row.getCell(1)));
-                gstR1Report.setPeriod(period);
+                sheetObj.setPeriod(period);
                 break;
             case 3:
                 DataPair gstin =
                         new DataPair().setLabel(Helper.getCellValueAsString(row.getCell(0))).setValue(Helper.getCellValueAsString(row.getCell(1)));
-                gstR1Report.setGstin(gstin);
+                sheetObj.setGstin(gstin);
                 break;
             case 4:
                 DataPair legalName =
                         new DataPair().setLabel(Helper.getCellValueAsString(row.getCell(0))).setValue(Helper.getCellValueAsString(row.getCell(1)));
-                gstR1Report.setLegalName(legalName);
+                sheetObj.setLegalName(legalName);
                 break;
             case 5:
                 DataPair traderName =
                         new DataPair().setLabel(Helper.getCellValueAsString(row.getCell(0))).setValue(Helper.getCellValueAsString(row.getCell(1)));
-                gstR1Report.setTradeName(traderName);
+                sheetObj.setTradeName(traderName);
                 break;
             case 6:
                 DataPair atpfy =
                         new DataPair().setLabel(Helper.getCellValueAsString(row.getCell(0))).setValue(Helper.getCellValueAsString(row.getCell(1)));
-                gstR1Report.setAggregateTurnoverOfPrecedingFinancialYear(atpfy);
+                sheetObj.setAggregateTurnoverOfPrecedingFinancialYear(atpfy);
                 break;
             case 7:
                 DataPair at =
                         new DataPair().setLabel(Helper.getCellValueAsString(row.getCell(0))).setValue(Helper.getCellValueAsString(row.getCell(1)));
-                gstR1Report.setAggregateTurnover(at);
+                sheetObj.setAggregateTurnover(at);
                 break;
         }
     }
