@@ -13,5 +13,7 @@ public interface IExcelProcessor {
 
     GstSheet read(Sheet sheet);
 
-    void write(String path, List<GstSheet> gstSheetList, boolean includeHeaders);
+    GstSheet merge(List<GstSheet> gstSheets);
+
+    void write(String path, GstSheet gstSheet);
 }

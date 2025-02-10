@@ -113,7 +113,12 @@ public class Gst1ReportProcessor implements IExcelProcessor {
     }
 
     @Override
-    public void write(String path, List<GstSheet> gstSheetList, boolean includeHeaders) {
+    public GstSheet merge(List<GstSheet> gstSheets) {
+        return null;
+    }
+
+    @Override
+    public void write(String path, GstSheet gstSheet) {
         System.out.println("test");
     }
 }

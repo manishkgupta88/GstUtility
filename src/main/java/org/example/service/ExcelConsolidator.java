@@ -56,7 +56,10 @@ public class ExcelConsolidator {
                         objs.add(gstSheet);
                     }
                 }
-                processor.write(folder.getParent(), objs, fileCount == 1);
+                if (!objs.isEmpty()) {
+                    GstSheet sheet = processor.merge(objs);
+                    processor.write(folder.getParent(), sheet);
+                }
             }
         } catch (Exception e) {
             System.out.print("Error reading files");
