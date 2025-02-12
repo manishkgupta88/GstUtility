@@ -12,5 +12,7 @@ public interface Constants {
     int B2csSheet = 3;
     int CdnrSheet = 4;
     int CdnurSheet = 5;
+    int AtSheet = 6;
+    int AtadjSheet = 7;
 
 }
