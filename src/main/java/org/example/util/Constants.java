@@ -15,5 +15,6 @@ public interface Constants {
     int AtSheet = 6;
     int AtadjSheet = 7;
     int ExempSheet = 8;
+    int HsnSheet = 9;
 
 }

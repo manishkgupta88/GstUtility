@@ -24,6 +24,7 @@ public class ExcelProcessorFactory {
         processorMap.put(Constants.AtSheet, new AtProcessor());
         processorMap.put(Constants.AtadjSheet, new AtadjProcessor());
         processorMap.put(Constants.ExempSheet, new ExempProcessor());
+        processorMap.put(Constants.HsnSheet, new HsnProcessor());
     }
 
     public static IExcelProcessor getExcelProcessor(int index) throws Exception {
