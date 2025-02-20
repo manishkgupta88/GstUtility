@@ -1,11 +1,9 @@
 package org.example.service.processors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.example.model.B2BInvoice;
-import org.example.model.B2BSheet;
-import org.example.model.DataPair;
-import org.example.model.GstSheet;
+import org.example.model.*;
 import org.example.service.IExcelProcessor;
 import org.example.util.Helper;
 
@@ -104,7 +102,27 @@ public class B2BProcessor implements IExcelProcessor {
 
     @Override
     public GstSheet merge(List<GstSheet> gstSheets) {
-        return null;
+        if (CollectionUtils.isEmpty(gstSheets)) {
+            return null;
+        }
+        B2BSheet finalSheet = (B2BSheet) gstSheets.get(0);
+        if (gstSheets.size() > 1) {
+            for (int i = 1; i < gstSheets.size(); i++) {
+                B2BSheet sheet = (B2BSheet) gstSheets.get(i);
+                if (finalSheet.getRecords() == null) {
+                    finalSheet.setRecords(new ArrayList<>());
+                }
+                if (sheet.getRecords() != null) {
+                    finalSheet.getRecords().addAll(sheet.getRecords());
+                }
+                finalSheet.setNumOfRecipients(finalSheet.getNumOfRecipients() + sheet.getNumOfRecipients());
+                finalSheet.setNumOfInvoices(finalSheet.getNumOfInvoices() + sheet.getNumOfInvoices());
+                finalSheet.setTotalInvoiceValue(finalSheet.getTotalInvoiceValue() + sheet.getTotalInvoiceValue());
+                finalSheet.setTotalTaxableValue(finalSheet.getTotalTaxableValue() + sheet.getTotalTaxableValue());
+                finalSheet.setTotalCessAmount(finalSheet.getTotalCessAmount() + sheet.getTotalCessAmount());
+            }
+        }
+        return finalSheet;
     }
 
     @Override

@@ -1,11 +1,9 @@
 package org.example.service.processors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.example.model.B2csRecord;
-import org.example.model.B2csSheet;
-import org.example.model.DataPair;
-import org.example.model.GstSheet;
+import org.example.model.*;
 import org.example.service.IExcelProcessor;
 import org.example.util.Helper;
 
@@ -83,7 +81,24 @@ public class B2csProcessor implements IExcelProcessor {
 
     @Override
     public GstSheet merge(List<GstSheet> gstSheets) {
-        return null;
+        if (CollectionUtils.isEmpty(gstSheets)) {
+            return null;
+        }
+        B2csSheet finalSheet = (B2csSheet) gstSheets.get(0);
+        if (gstSheets.size() > 1) {
+            for (int i = 1; i < gstSheets.size(); i++) {
+                B2csSheet sheet = (B2csSheet) gstSheets.get(i);
+                if (finalSheet.getRecords() == null) {
+                    finalSheet.setRecords(new ArrayList<>());
+                }
+                if (sheet.getRecords() != null) {
+                    finalSheet.getRecords().addAll(sheet.getRecords());
+                }
+                finalSheet.setTotalTaxableValue(finalSheet.getTotalTaxableValue() + sheet.getTotalTaxableValue());
+                finalSheet.setTotalCessAmount(finalSheet.getTotalCessAmount() + sheet.getTotalCessAmount());
+            }
+        }
+        return finalSheet;
     }
 
     @Override

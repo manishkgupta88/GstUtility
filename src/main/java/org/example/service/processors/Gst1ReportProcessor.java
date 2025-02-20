@@ -1,5 +1,6 @@
 package org.example.service.processors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -118,7 +119,28 @@ public class Gst1ReportProcessor implements IExcelProcessor {
 
     @Override
     public GstSheet merge(List<GstSheet> gstSheets) {
-        return null;
+        if (CollectionUtils.isEmpty(gstSheets)) {
+            return null;
+        }
+        GstR1Report finalSheet = (GstR1Report) gstSheets.get(0);
+        if (gstSheets.size() > 1) {
+            for (int i = 1; i < gstSheets.size(); i++) {
+                GstR1Report sheet = (GstR1Report) gstSheets.get(i);
+                if (finalSheet.getRecords() == null) {
+                    finalSheet.setRecords(new ArrayList<>());
+                }
+                if (sheet.getRecords() != null) {
+                    finalSheet.getRecords().addAll(sheet.getRecords());
+                }
+                finalSheet.setTotalInvoiceValue(finalSheet.getTotalInvoiceValue() + sheet.getTotalInvoiceValue());
+                finalSheet.setTotalTaxableValue(finalSheet.getTotalTaxableValue() + sheet.getTotalTaxableValue());
+                finalSheet.setTotalTaxAmount(finalSheet.getTotalTaxAmount() + sheet.getTotalTaxAmount());
+                finalSheet.setTotalCentralTaxAmount(finalSheet.getTotalCentralTaxAmount() + sheet.getTotalCentralTaxAmount());
+                finalSheet.setTotalStateTaxAmount(finalSheet.getTotalStateTaxAmount() + sheet.getTotalStateTaxAmount());
+                finalSheet.setTotalCessAmount(finalSheet.getTotalCessAmount() + sheet.getTotalCessAmount());
+            }
+        }
+        return finalSheet;
     }
 
     @Override
