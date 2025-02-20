@@ -1,10 +1,11 @@
 package org.example.service.processors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.example.model.DataPair;
 import org.example.model.ExempRecord;
 import org.example.model.ExempSheet;
-import org.example.model.DataPair;
 import org.example.model.GstSheet;
 import org.example.service.IExcelProcessor;
 import org.example.util.Helper;
@@ -87,7 +88,26 @@ public class ExempProcessor implements IExcelProcessor {
 
     @Override
     public GstSheet merge(List<GstSheet> gstSheets) {
-        return null;
+        if (CollectionUtils.isEmpty(gstSheets)) {
+            return null;
+        }
+        ExempSheet finalSheet = (ExempSheet) gstSheets.get(0);
+        if (gstSheets.size() > 1) {
+            for (int i = 1; i < gstSheets.size(); i++) {
+                ExempSheet sheet = (ExempSheet) gstSheets.get(i);
+                if (finalSheet.getRecords() == null) {
+                    finalSheet.setRecords(new ArrayList<>());
+                }
+                if (sheet.getRecords() != null) {
+                    finalSheet.getRecords().addAll(sheet.getRecords());
+                }
+                finalSheet.setTotalNilRatedSupplies(finalSheet.getTotalNilRatedSupplies() + sheet.getTotalNilRatedSupplies());
+                finalSheet.setTotalExemptedSupplies(finalSheet.getTotalExemptedSupplies() + sheet.getTotalExemptedSupplies());
+                finalSheet.setTotalNonGstSupplies(finalSheet.getTotalNonGstSupplies() + sheet.getTotalNonGstSupplies());
+
+            }
+        }
+        return finalSheet;
     }
 
     @Override

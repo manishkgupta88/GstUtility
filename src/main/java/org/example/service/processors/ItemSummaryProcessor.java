@@ -1,5 +1,6 @@
 package org.example.service.processors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.example.model.*;
@@ -120,7 +121,29 @@ public class ItemSummaryProcessor implements IExcelProcessor {
 
     @Override
     public GstSheet merge(List<GstSheet> gstSheets) {
-        return null;
+        if (CollectionUtils.isEmpty(gstSheets)) {
+            return null;
+        }
+        ItemSummarySheet finalSheet = (ItemSummarySheet) gstSheets.get(0);
+        if (gstSheets.size() > 1) {
+            for (int i = 1; i < gstSheets.size(); i++) {
+                ItemSummarySheet sheet = (ItemSummarySheet) gstSheets.get(i);
+                if (finalSheet.getRecords() == null) {
+                    finalSheet.setRecords(new ArrayList<>());
+                }
+                if (sheet.getRecords() != null) {
+                    finalSheet.getRecords().addAll(sheet.getRecords());
+                }
+                finalSheet.setNumOfHsn(finalSheet.getNumOfHsn() + sheet.getNumOfHsn());
+                finalSheet.setTotal(finalSheet.getTotal() + sheet.getTotal());
+                finalSheet.setTaxableValue(finalSheet.getTaxableValue() + sheet.getTaxableValue());
+                finalSheet.setIntegrateTax(finalSheet.getIntegrateTax() + sheet.getIntegrateTax());
+                finalSheet.setCentralTax(finalSheet.getCentralTax() + sheet.getCentralTax());
+                finalSheet.setStateTax(finalSheet.getStateTax() + sheet.getStateTax());
+                finalSheet.setCess(finalSheet.getCess() + sheet.getCess());
+            }
+        }
+        return finalSheet;
     }
 
     @Override
