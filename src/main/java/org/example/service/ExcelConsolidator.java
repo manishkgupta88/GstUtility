@@ -66,4 +66,57 @@ public class ExcelConsolidator {
             e.printStackTrace();
         }
     }
+
+    /*
+    public static <T> void writeDataToExcel(String filePath, MainDto mainDto) {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Data");
+
+        int rowNum = 0;
+
+        // Creating header row
+        Row headerRow = sheet.createRow(rowNum++);
+        String[] headers = {"Field1", "Field2", "SubItem1", "SubItem2"};
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(getHeaderStyle(workbook));
+        }
+
+        // Writing main object fields
+        for (SubDto subDto : mainDto.getSubDtoList()) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(mainDto.getField1());
+            row.createCell(1).setCellValue(mainDto.getField2());
+            row.createCell(2).setCellValue(subDto.getSubField1());
+            row.createCell(3).setCellValue(subDto.getSubField2());
+        }
+
+        // Auto-size columns
+        for (int i = 0; i < headers.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        // Write to file
+        try (FileOutputStream outputStream = new FileOutputStream(filePath)) {
+            workbook.write(outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static CellStyle getHeaderStyle(Workbook workbook) {
+        CellStyle style = workbook.createCellStyle();
+        Font font = workbook.createFont();
+        font.setBold(true);
+        style.setFont(font);
+        return style;
+    }
+    * */
 }
