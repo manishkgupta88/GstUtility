@@ -3,9 +3,11 @@ package org.example.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.Serial;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User : Manish K. Gupta
@@ -33,4 +35,9 @@ public class HsnSheet implements GstSheet {
     private Double stateTax;
     private Double cess;
     private List<HsnRecord> records;
+    private Map<ItemHsnKey, ItemHsn> hsnMap;
+
+    public ItemHsnKey getItemHsnKey(String hsn, String rate) {
+        return new ItemHsnKey(hsn, NumberUtils.toInt(rate));
+    }
 }

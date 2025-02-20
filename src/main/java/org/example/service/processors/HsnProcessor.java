@@ -2,10 +2,7 @@ package org.example.service.processors;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.example.model.DataPair;
-import org.example.model.GstSheet;
-import org.example.model.HsnRecord;
-import org.example.model.HsnSheet;
+import org.example.model.*;
 import org.example.service.IExcelProcessor;
 import org.example.util.Helper;
 
@@ -40,6 +37,15 @@ public class HsnProcessor implements IExcelProcessor {
             row = itr.next();
             HsnRecord record = parseInvoiceRow(row);
             records.add(record);
+            ItemHsnKey itemHsnKey = sheetObj.getItemHsnKey(record.getHsn(), record.getRate());
+            ItemHsn prevItemHsn = sheetObj.getHsnMap().get(itemHsnKey);
+            if (prevItemHsn == null) {
+                prevItemHsn = record.getItemHsn();
+            } else {
+                ItemHsn itemHsn = record.getItemHsn();
+                prevItemHsn.merge(itemHsn);
+            }
+            sheetObj.getHsnMap().put(itemHsnKey, prevItemHsn);
         }
         sheetObj.setRecords(records);
         return sheetObj;
