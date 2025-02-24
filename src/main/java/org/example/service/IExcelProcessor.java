@@ -15,5 +15,5 @@ public interface IExcelProcessor {
 
     GstSheet merge(List<GstSheet> gstSheets);
 
-    void write(String path, GstSheet gstSheet);
+    void write(Sheet wbSheet, GstSheet gstSheet);
 }

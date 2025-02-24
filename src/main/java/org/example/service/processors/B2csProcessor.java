@@ -102,7 +102,7 @@ public class B2csProcessor implements IExcelProcessor {
     }
 
     @Override
-    public void write(String path, GstSheet gstSheet) {
+    public void write(Sheet wbSheet, GstSheet gstSheet) {
 
     }
 }

@@ -122,7 +122,7 @@ public class CdnurProcessor implements IExcelProcessor {
     }
 
     @Override
-    public void write(String path, GstSheet gstSheet) {
+    public void write(Sheet wbSheet, GstSheet gstSheet) {
 
     }
 }
