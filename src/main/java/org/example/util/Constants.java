@@ -5,17 +5,23 @@ package org.example.util;
  */
 
 public interface Constants {
-    int MaxSheets = 12;
-    int GstR1Sheet = 0;
-    int B2BSheet = 1;
-    int B2ClSheet = 2;
-    int B2csSheet = 3;
-    int CdnrSheet = 4;
-    int CdnurSheet = 5;
-    int AtSheet = 6;
-    int AtadjSheet = 7;
-    int ExempSheet = 8;
-    int HsnSheet = 9;
-    int ItemSummarySheet = 10;
+
+    interface ExcelFile {
+        int MaxSheets = 12;
+        int GstR1Sheet = 0;
+        int B2BSheet = 1;
+        int B2ClSheet = 2;
+        int B2csSheet = 3;
+        int CdnrSheet = 4;
+        int CdnurSheet = 5;
+        int AtSheet = 6;
+        int AtadjSheet = 7;
+        int ExempSheet = 8;
+        int HsnSheet = 9;
+        int ItemSummarySheet = 10;
+        String WindowsOutputFile = "C:\\Users\\guptamanis\\Desktop";
+        String LinuxOutputFile = "/home/guptamanis/Desktop";
+    }
+
 
 }

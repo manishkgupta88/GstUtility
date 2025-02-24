@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.model.GstSheet;
 import org.example.util.Constants;
+import org.example.util.Helper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,43 +29,49 @@ public class ExcelConsolidator {
             return;
         }
         System.out.println("Folder " + folder.getPath() + "accessed and read");
-        executeFiles(folder);
+        String outputPath = Helper.getOutputPath(path);
+        System.out.println("Output file " + outputPath);
+        processFiles(folder);
     }
 
-    private void executeFiles(File folder) {
+    private void processFiles(File folder) {
         try {
-            int fileCount = 0;
-            for (int i = 3; i < Constants.MaxSheets; i++) {
-                IExcelProcessor processor = ExcelProcessorFactory.getExcelProcessor(i);
-                fileCount = 0;
-                List<GstSheet> objs = new ArrayList<>();
-                for (File file : folder.listFiles()) {
-                    if (!file.getName().endsWith("xls") && !file.getName().endsWith("xlsx")) {
-                        System.out.println("Skipping file: " + file.getName());
-                        continue;
-                    }
-                    ++fileCount;
-                    Workbook workbook = new XSSFWorkbook(file);
-                    Sheet sheet = workbook.getSheetAt(i);
-                    System.out.println("Processing sheet: '" + sheet.getSheetName() + "' from file: '" + file.getName() + "'");
-                    if (processor == null) {
-                        System.out.println("Could not find processor for sheet: " + sheet.getSheetName());
-                        throw new Exception("Processor not found");
-                    }
-                    GstSheet gstSheet = processor.read(sheet);
-                    if (gstSheet != null) {
-                        objs.add(gstSheet);
-                    }
-                }
+            for (int sheetCount = 0; sheetCount < Constants.ExcelFile.MaxSheets; sheetCount++) {
+                IExcelProcessor processor = ExcelProcessorFactory.getExcelProcessor(sheetCount);
+                List<GstSheet> objs = readSheet(folder, processor, sheetCount);
                 if (!objs.isEmpty()) {
-                    GstSheet sheet = processor.merge(objs);
-                    processor.write(folder.getParent(), sheet);
+                    GstSheet finalSheet = processor.merge(objs);
+                    processor.write(folder.getParent(), finalSheet);
                 }
             }
         } catch (Exception e) {
             System.out.print("Error reading files");
             e.printStackTrace();
         }
+    }
+
+    private List<GstSheet> readSheet(File folder, IExcelProcessor processor, int sheetCount) throws Exception {
+        List<GstSheet> objs = new ArrayList<>();
+        int fileCount = 0;
+        for (File file : folder.listFiles()) {
+            if (!file.getName().endsWith("xls") && !file.getName().endsWith("xlsx")) {
+                System.out.println("Skipping file: " + file.getName());
+                continue;
+            }
+            ++fileCount;
+            Workbook workbook = new XSSFWorkbook(file);
+            Sheet sheet = workbook.getSheetAt(sheetCount);
+            System.out.println("Processing sheet: '" + sheet.getSheetName() + "' from file: '" + file.getName() + "'");
+            if (processor == null) {
+                System.out.println("Could not find processor for sheet: " + sheet.getSheetName());
+                throw new Exception("Processor not found");
+            }
+            GstSheet gstSheet = processor.read(sheet);
+            if (gstSheet != null) {
+                objs.add(gstSheet);
+            }
+        }
+        return objs;
     }
 
     /*
