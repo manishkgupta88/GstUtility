@@ -15,90 +15,19 @@ import java.util.List;
  * User : Manish K. Gupta
  */
 
-public class AtadjProcessor implements IExcelProcessor {
+public class AtadjProcessor extends AbstractExcelProcessor {
     @Override
     public GstSheet read(Sheet sheet) {
         if (sheet == null) {
             return null;
         }
-        Iterator<Row> itr = sheet.iterator();
         AtadjSheet sheetObj = new AtadjSheet();
-        int rc = 0;
-        while (itr.hasNext()) {
-            ++rc;
-            Row row = itr.next();
-            parseRow(rc, row, sheetObj);
-            if (rc == 4) {
-                break;
-            }
-        }
-        List<AtadjRecord> records = new ArrayList<>();
-        Row row = null;
-        while (itr.hasNext()) {
-            row = itr.next();
-            AtadjRecord record = parseInvoiceRow(row);
-            records.add(record);
-        }
-        sheetObj.setRecords(records);
+        readRowPairs(sheet, sheetObj);
+        readColumnPairs(sheet, sheetObj);
+        readSummary(sheet, sheetObj);
+        readTableHeaders(sheet, sheetObj);
+        readRecords(sheet, sheetObj);
         return sheetObj;
-    }
-
-    private AtadjRecord parseInvoiceRow(Row row) {
-        AtadjRecord record = new AtadjRecord();
-        record.setPlaceOfSupply(Helper.getCellValueAsString(row.getCell(0)))
-                .setApplicableTaxRate(Helper.getCellValueAsString(row.getCell(1)))
-                .setTaxRate(Helper.getCellValueAsString(row.getCell(2)))
-                .setGrossAdvanceAdjustedTax(Helper.getCellValueAsString(row.getCell(3)))
-                .setCessAmount(Helper.getCellValueAsString(row.getCell(4)));
-        return record;
-    }
-
-    private void parseRow(int rc, Row row, AtadjSheet cdnrSheet) {
-        switch (rc) {
-            case 1:
-                DataPair title =
-                        new DataPair().setLabel(Helper.getCellValueAsString(row.getCell(0)));
-                cdnrSheet.setTitle(title);
-                break;
-            case 2:
-                DataPair advanceTax = new DataPair().setLabel(Helper.getCellValueAsString(row.getCell(3)));
-                DataPair totalCess = new DataPair().setLabel(Helper.getCellValueAsString(row.getCell(4)));
-                cdnrSheet.setAdvanceTaxAdjusted(advanceTax);
-                cdnrSheet.setTotalCess(totalCess);
-                break;
-            case 3:
-                Double advanceTaxValue = Helper.getCellValueAsDouble(row.getCell(3));
-                Double totalCessDbl = Helper.getCellValueAsDouble(row.getCell(4));
-
-                cdnrSheet.getAdvanceTaxAdjusted().setValue(String.valueOf(advanceTaxValue));
-                cdnrSheet.getTotalCess().setValue(String.valueOf(totalCessDbl));
-
-                cdnrSheet.setTotalAdvanceAdjustedValue(advanceTaxValue);
-                cdnrSheet.setTotalCessAmount(totalCessDbl);
-                break;
-        }
-    }
-
-    @Override
-    public GstSheet merge(List<GstSheet> gstSheets) {
-        if (CollectionUtils.isEmpty(gstSheets)) {
-            return null;
-        }
-        AtadjSheet finalSheet = (AtadjSheet) gstSheets.get(0);
-        if (gstSheets.size() > 1) {
-            for (int i = 1; i < gstSheets.size(); i++) {
-                AtadjSheet sheet = (AtadjSheet) gstSheets.get(i);
-                if (finalSheet.getRecords() == null) {
-                    finalSheet.setRecords(new ArrayList<>());
-                }
-                if (sheet.getRecords() != null) {
-                    finalSheet.getRecords().addAll(sheet.getRecords());
-                }
-                finalSheet.setTotalAdvanceAdjustedValue(finalSheet.getTotalAdvanceAdjustedValue() + sheet.getTotalAdvanceAdjustedValue());
-                finalSheet.setTotalCessAmount(finalSheet.getTotalCessAmount() + sheet.getTotalCessAmount());
-            }
-        }
-        return finalSheet;
     }
 
     @Override

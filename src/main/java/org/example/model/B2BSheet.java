@@ -1,32 +1,25 @@
 package org.example.model;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serial;
-import java.util.List;
 
 /**
  * User : Manish K. Gupta
  */
-@Data
+@Getter
 @NoArgsConstructor
 @Accessors(chain = true)
-public class B2BSheet implements GstSheet {
+public class B2BSheet extends GstSheet {
 
     @Serial
     private static final long serialVersionUID = 6962105547943529654L;
-    private DataPair title;
-    private DataPair recipients;
-    private DataPair invoices;
-    private DataPair invoiceValue;
-    private DataPair taxableValue;
-    private DataPair totalCess;
-    private int numOfRecipients;
-    private int numOfInvoices;
-    private Double totalInvoiceValue;
-    private Double totalTaxableValue;
-    private Double totalCessAmount;
-    private List<B2BInvoice> records;
+    private final int rowPairCount = 1;
+    private final int cpRow = 1;
+    private final int summaryRow = 2;
+    private final int columnPairCount = 13;
+    private final int headerCount = 13;
+    private final int dataStartRow = 4;
 }

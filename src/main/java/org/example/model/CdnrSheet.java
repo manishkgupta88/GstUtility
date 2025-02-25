@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serial;
-import java.util.List;
 
 /**
  * User : Manish K. Gupta
@@ -13,20 +12,15 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
-public class CdnrSheet implements GstSheet {
+public class CdnrSheet extends GstSheet {
 
     @Serial
     private static final long serialVersionUID = 6962105547943529654L;
-    private DataPair recipients;
-    private DataPair notes;
-    private DataPair noteValue;
-    private DataPair taxableValue;
-    private DataPair totalCess;
-    private DataPair title;
-    private int numOfRecipients;
-    private int numOfNotes;
-    private Double totalNoteValue;
-    private Double totalTaxableValue;
-    private Double totalCessAmount;
-    private List<CdnrRecord> records;
+
+    private final int rowPairCount = 1;
+    private final int cpRow = 1;
+    private final int dataStartRow = 4;
+    private final int summaryRow = 2;
+    private final int columnPairCount = 13;
+    private final int headerCount = 13;
 }

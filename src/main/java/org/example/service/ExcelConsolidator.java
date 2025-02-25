@@ -40,25 +40,13 @@ public class ExcelConsolidator {
                 IExcelProcessor processor = ExcelProcessorFactory.getExcelProcessor(sheetCount);
                 List<GstSheet> objs = readSheet(folder, processor, sheetCount);
                 GstSheet gstSheet = processor.merge(objs);
+//                Sheet wbSheet = workbook.createSheet(gstSheet.getName());
                 Sheet wbSheet = workbook.createSheet();
                 processor.write(wbSheet, gstSheet);
             }
             createOutputFile(workbook, folder.getPath());
         } catch (Exception e) {
             System.out.print("Error processing files");
-            e.printStackTrace();
-        }
-    }
-
-    private void createOutputFile(Workbook workbook, String path) {
-        String outputPath = Helper.getOutputPath(path);
-        System.out.println("Output file " + outputPath);
-        FileOutputStream outputStream = null;
-        try {
-            outputStream = new FileOutputStream(outputPath);
-            workbook.write(outputStream);
-        } catch (Exception e) {
-            System.out.print("Error writing the output file");
             e.printStackTrace();
         }
     }
@@ -81,9 +69,23 @@ public class ExcelConsolidator {
             }
             GstSheet gstSheet = processor.read(sheet);
             if (gstSheet != null) {
+                gstSheet.setName(sheet.getSheetName());
                 objs.add(gstSheet);
             }
         }
         return objs;
+    }
+
+    private void createOutputFile(Workbook workbook, String path) {
+        String outputPath = Helper.getOutputPath(path);
+        System.out.println("Output file " + outputPath);
+        FileOutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream(outputPath);
+            workbook.write(outputStream);
+        } catch (Exception e) {
+            System.out.print("Error writing the output file");
+            e.printStackTrace();
+        }
     }
 }

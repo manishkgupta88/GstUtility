@@ -13,16 +13,14 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
-public class ExempSheet implements GstSheet {
+public class ExempSheet extends GstSheet {
 
     @Serial
     private static final long serialVersionUID = 6962105547943529654L;
-    private DataPair title;
-    private DataPair nilRatedSupplies;
-    private DataPair exemptedSupplies;
-    private DataPair nonGstSupplies;
-    private Double totalNilRatedSupplies;
-    private Double totalExemptedSupplies;
-    private Double totalNonGstSupplies;
-    private List<ExempRecord> records;
+    private final int rowPairCount = 1;
+    private final int cpRow = 1;
+    private final int dataStartRow = 4;
+    private final int summaryRow = 2;
+    private final int columnPairCount = 4;
+    private final int headerCount = 4;
 }
