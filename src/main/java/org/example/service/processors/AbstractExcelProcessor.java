@@ -7,7 +7,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.example.model.DataPair;
 import org.example.model.GstSheet;
-import org.example.model.GstSheet;
 import org.example.service.IExcelProcessor;
 import org.example.util.Helper;
 
@@ -107,11 +106,11 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
         GstSheet finalSheet = gstSheets.get(0);
         LinkedList<DataPair> summaryList = finalSheet.getSummaryList();
         if (gstSheets.size() > 1) {
+            if (finalSheet.getRecords() == null) {
+                finalSheet.setRecords(new ArrayList<>());
+            }
             for (int i = 1; i < gstSheets.size(); i++) {
                 GstSheet sheet = gstSheets.get(i);
-                if (finalSheet.getRecords() == null) {
-                    finalSheet.setRecords(new ArrayList<>());
-                }
                 if (sheet.getRecords() != null) {
                     finalSheet.getRecords().addAll(sheet.getRecords());
                 }
