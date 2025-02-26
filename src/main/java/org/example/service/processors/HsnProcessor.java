@@ -26,22 +26,6 @@ public class HsnProcessor extends AbstractExcelProcessor {
         readSummary(sheet, sheetObj);
         readTableHeaders(sheet, sheetObj);
         readRecords(sheet, sheetObj);
-
-        /*while (itr.hasNext()) {
-            row = itr.next();
-            HsnRecord record = parseInvoiceRow(row);
-            records.add(record);
-            ItemHsnKey itemHsnKey = sheetObj.getItemHsnKey(record.getHsn(), record.getRate());
-            ItemHsn prevItemHsn = sheetObj.getHsnMap().get(itemHsnKey);
-            if (prevItemHsn == null) {
-                prevItemHsn = record.getItemHsn();
-            } else {
-                ItemHsn itemHsn = record.getItemHsn();
-                prevItemHsn.merge(itemHsn);
-            }
-            sheetObj.getHsnMap().put(itemHsnKey, prevItemHsn);
-        }
-        sheetObj.setRecords(records);*/
         return sheetObj;
     }
 
