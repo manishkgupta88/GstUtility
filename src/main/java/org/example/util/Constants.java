@@ -21,6 +21,7 @@ public interface Constants {
         int ItemSummarySheet = 10;
         String WindowsOutputFile = "C:\\Users\\guptamanis\\Desktop";
         String LinuxOutputFile = "/home/guptamanis/Desktop";
+        String OutputFileName = "gst";
     }
 
 

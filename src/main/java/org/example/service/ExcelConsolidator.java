@@ -38,10 +38,9 @@ public class ExcelConsolidator {
             Workbook workbook = new XSSFWorkbook();
             for (int sheetCount = 0; sheetCount < Constants.ExcelFile.MaxSheets; sheetCount++) {
                 IExcelProcessor processor = ExcelProcessorFactory.getExcelProcessor(sheetCount);
-                List<GstSheet> objs = readSheet(folder, processor, sheetCount);
+                List<GstSheet> objs = readSheetInAllFiles(folder, processor, sheetCount);
                 GstSheet gstSheet = processor.merge(objs);
-//                Sheet wbSheet = workbook.createSheet(gstSheet.getName());
-                Sheet wbSheet = workbook.createSheet();
+                Sheet wbSheet = workbook.createSheet(gstSheet.getName());
                 processor.write(wbSheet, gstSheet);
             }
             createOutputFile(workbook, folder.getPath());
@@ -51,7 +50,7 @@ public class ExcelConsolidator {
         }
     }
 
-    private List<GstSheet> readSheet(File folder, IExcelProcessor processor, int sheetCount) throws Exception {
+    private List<GstSheet> readSheetInAllFiles(File folder, IExcelProcessor processor, int sheetCount) throws Exception {
         List<GstSheet> objs = new ArrayList<>();
         int fileCount = 0;
         for (File file : folder.listFiles()) {
@@ -77,12 +76,14 @@ public class ExcelConsolidator {
     }
 
     private void createOutputFile(Workbook workbook, String path) {
-        String outputPath = Helper.getOutputPath(path);
+        String outputPath =
+                Helper.getOutputPath(path).concat(File.separator).concat(Constants.ExcelFile.OutputFileName).concat(String.valueOf(System.currentTimeMillis())).concat(".xls");
         System.out.println("Output file " + outputPath);
         FileOutputStream outputStream = null;
         try {
             outputStream = new FileOutputStream(outputPath);
             workbook.write(outputStream);
+            outputStream.close();
         } catch (Exception e) {
             System.out.print("Error writing the output file");
             e.printStackTrace();
