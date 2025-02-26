@@ -39,9 +39,9 @@ public class ExcelConsolidator {
             for (int sheetCount = 0; sheetCount < Constants.ExcelFile.MaxSheets; sheetCount++) {
                 IExcelProcessor processor = ExcelProcessorFactory.getExcelProcessor(sheetCount);
                 List<GstSheet> objs = readSheetInAllFiles(folder, processor, sheetCount);
-                GstSheet gstSheet = processor.merge(objs);
-                Sheet wbSheet = workbook.createSheet(gstSheet.getName());
-                processor.write(wbSheet, gstSheet);
+//                GstSheet gstSheet = processor.merge(objs);
+//                Sheet wbSheet = workbook.createSheet(gstSheet.getName());
+//                processor.write(wbSheet, gstSheet);
             }
             createOutputFile(workbook, folder.getPath());
         } catch (Exception e) {

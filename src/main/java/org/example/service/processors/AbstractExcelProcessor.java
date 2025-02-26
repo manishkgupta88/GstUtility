@@ -84,15 +84,16 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
         for (int rc = sheetObj.getDataStartRow(); ; rc++) {
             row = sheet.getRow(rc);
             List<String> cellDataList = new ArrayList<>();
-            for (int i = 0; i < sheetObj.getHeaderCount(); i++) {
-                if (row == null) {
-                    return;
-                }
-                String val = Helper.getCellValueAsString(row.getCell(i));
-                if (sheetObj.isSummaryInLastRow() && i == 1 && StringUtils.isEmpty(val)) {
-                    return;
-                } else {
-                    cellDataList.add(val);
+            if (row == null) {
+                cellDataList.add(null);
+            } else {
+                for (int i = 0; i < sheetObj.getHeaderCount(); i++) {
+                    String val = Helper.getCellValueAsString(row.getCell(i));
+                    if (sheetObj.isSummaryInLastRow() && i == 1 && StringUtils.isEmpty(val)) {
+                        return;
+                    } else {
+                        cellDataList.add(val);
+                    }
                 }
             }
             sheetObj.getRecords().add(cellDataList);

@@ -19,7 +19,7 @@ public class GstR1Report extends GstSheet {
     private final int headerCount = 15;
     private final int dataStartRow = 9;
     private final boolean summaryInLastRow = true;
+    private final int columnPairCount = 14;
     private final int cpRow = -1;
-    private final int columnPairCount = -1;
     private final int summaryRow = -1;
 }
