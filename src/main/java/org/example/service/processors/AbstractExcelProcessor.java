@@ -118,7 +118,7 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
                     DataPair dataPair = sheet.getSummaryList().get(j);
                     if (StringUtils.isNotEmpty(dataPair.getValue())) {
                         DataPair finalPair = summaryList.get(j);
-                        finalPair.setValue(String.valueOf(NumberUtils.toDouble(dataPair.getValue()) + NumberUtils.toDouble(finalPair.getValue(), 0.0)));
+                        finalPair.setValue(String.valueOf(NumberUtils.toDouble(dataPair.getValue()) + NumberUtils.toDouble(finalPair.getValue())));
                     }
                 }
             }

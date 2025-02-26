@@ -52,6 +52,16 @@ public class ExempProcessor extends AbstractExcelProcessor {
         return finalSheet;
     }
 
+    private Map<String, List<String>> getRecordMap(List<List<String>> records) {
+        Map<String, List<String>> map = new HashMap<>();
+        for (List<String> record : records) {
+            if (record != null) {
+                map.put(record.get(0), record);
+            }
+        }
+        return map;
+    }
+
     private void mergeRecordList(ExempSheet sheet, Map<String, List<String>> map) {
         if (sheet.getRecords() == null) {
             return;
@@ -78,19 +88,9 @@ public class ExempProcessor extends AbstractExcelProcessor {
             DataPair dataPair = sheet.getSummaryList().get(j);
             if (StringUtils.isNotEmpty(dataPair.getValue())) {
                 DataPair finalPair = summaryList.get(j);
-                finalPair.setValue(String.valueOf(NumberUtils.toDouble(dataPair.getValue()) + NumberUtils.toDouble(finalPair.getValue(), 0.0)));
+                finalPair.setValue(String.valueOf(NumberUtils.toDouble(dataPair.getValue()) + NumberUtils.toDouble(finalPair.getValue())));
             }
         }
-    }
-
-    private Map<String, List<String>> getRecordMap(List<List<String>> records) {
-        Map<String, List<String>> map = new HashMap<>();
-        for (List<String> record : records) {
-            if (record != null) {
-                map.put(record.get(0), record);
-            }
-        }
-        return map;
     }
 
     @Override
