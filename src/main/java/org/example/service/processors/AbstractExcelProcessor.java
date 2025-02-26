@@ -37,9 +37,9 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
             for (int i = 0; i < sheetObj.getColumnPairCount(); i++) {
                 String val = Helper.getCellValueAsString(labelRow.getCell(i));
                 if (StringUtils.isEmpty(val)) {
-                    sheetObj.getTableHeaders().add(new DataPair());
+                    sheetObj.getColumnPairs().add(new DataPair());
                 } else {
-                    sheetObj.getRowPairs().add(new DataPair().setLabel(val));
+                    sheetObj.getColumnPairs().add(new DataPair().setLabel(val));
                 }
             }
         }
@@ -62,9 +62,9 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
                     }
                 } else {
                     if (StringUtils.isEmpty(val)) {
-                        sheetObj.getTableHeaders().add(new DataPair());
+                        sheetObj.getSummaryList().add(new DataPair().setLabel(val));
                     } else {
-                        sheetObj.getRowPairs().add(new DataPair().setValue(val));
+                        sheetObj.getSummaryList().add(new DataPair().setValue(val));
                     }
                 }
 
