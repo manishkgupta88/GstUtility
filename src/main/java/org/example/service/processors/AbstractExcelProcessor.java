@@ -10,7 +10,6 @@ import org.example.model.GstSheet;
 import org.example.service.IExcelProcessor;
 import org.example.util.Helper;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -83,7 +82,7 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
         Row row = null;
         for (int rc = sheetObj.getDataStartRow(); ; rc++) {
             row = sheet.getRow(rc);
-            List<String> cellDataList = new ArrayList<>();
+            List<String> cellDataList = new LinkedList<>();
             if (rc > sheet.getLastRowNum()) {
                 return;
             }
@@ -111,27 +110,31 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
         LinkedList<DataPair> summaryList = finalSheet.getSummaryList();
         if (gstSheets.size() > 1) {
             if (finalSheet.getRecords() == null) {
-                finalSheet.setRecords(new ArrayList<>());
+                finalSheet.setRecords(new LinkedList<>());
             }
             for (int i = 1; i < gstSheets.size(); i++) {
                 GstSheet sheet = gstSheets.get(i);
                 if (sheet.getRecords() != null) {
                     finalSheet.getRecords().addAll(sheet.getRecords());
                 }
-                for (int j = 0; j < sheet.getSummaryList().size(); j++) {
-                    DataPair dataPair = sheet.getSummaryList().get(j);
-                    if (StringUtils.isNotEmpty(dataPair.getValue())) {
-                        DataPair finalPair = summaryList.get(j);
-                        finalPair.setValue(String.valueOf(NumberUtils.toDouble(dataPair.getValue()) + NumberUtils.toDouble(finalPair.getValue())));
-                    }
-                }
+                mergeSummary(sheet, summaryList);
             }
         }
         computeUniqueCounts(finalSheet);
         return finalSheet;
     }
 
-    private void computeUniqueCounts(GstSheet finalSheet) {
+    protected void mergeSummary(GstSheet sheet, LinkedList<DataPair> summaryList) {
+        for (int j = 0; j < sheet.getSummaryList().size(); j++) {
+            DataPair dataPair = sheet.getSummaryList().get(j);
+            if (StringUtils.isNotEmpty(dataPair.getValue())) {
+                DataPair finalPair = summaryList.get(j);
+                finalPair.setValue(String.valueOf(NumberUtils.toDouble(dataPair.getValue()) + NumberUtils.toDouble(finalPair.getValue())));
+            }
+        }
+    }
+
+    protected void computeUniqueCounts(GstSheet finalSheet) {
         if (finalSheet.getUniqueCountIndexes() == null) {
             return;
         }

@@ -8,7 +8,10 @@ import org.example.model.DataPair;
 import org.example.model.ExempSheet;
 import org.example.model.GstSheet;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User : Manish K. Gupta
@@ -38,7 +41,7 @@ public class ExempProcessor extends AbstractExcelProcessor {
         LinkedList<DataPair> summaryList = finalSheet.getSummaryList();
         if (gstSheets.size() > 1) {
             if (finalSheet.getRecords() == null) {
-                finalSheet.setRecords(new ArrayList<>());
+                finalSheet.setRecords(new LinkedList<>());
             }
             Map<String, List<String>> map = getRecordMap(finalSheet.getRecords());
             for (int i = 1; i < gstSheets.size(); i++) {

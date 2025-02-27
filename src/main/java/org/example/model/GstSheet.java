@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,7 +19,7 @@ public abstract class GstSheet implements Serializable {
     private LinkedList<DataPair> rowPairs = new LinkedList<DataPair>();
     private LinkedList<DataPair> columnPairs = new LinkedList<DataPair>();
     private LinkedList<DataPair> tableHeaders = new LinkedList<DataPair>();
-    private List<List<String>> records = new ArrayList<>();
+    private List<List<String>> records = new LinkedList<>();
 
     public abstract int getRowPairCount();
 

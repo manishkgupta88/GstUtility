@@ -1,14 +1,16 @@
 package org.example.service.processors;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.example.model.DataPair;
 import org.example.model.GstSheet;
 import org.example.model.ItemSummarySheet;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User : Manish K. Gupta
@@ -38,7 +40,7 @@ public class ItemSummaryProcessor extends AbstractExcelProcessor {
         LinkedList<DataPair> summaryList = finalSheet.getSummaryList();
         if (gstSheets.size() > 1) {
             if (finalSheet.getRecords() == null) {
-                finalSheet.setRecords(new ArrayList<>());
+                finalSheet.setRecords(new LinkedList<>());
             }
             Map<String, List<String>> map = getRecordMap(finalSheet.getRecords());
             for (int i = 1; i < gstSheets.size(); i++) {
@@ -49,11 +51,12 @@ public class ItemSummaryProcessor extends AbstractExcelProcessor {
             finalSheet.getRecords().clear();
             finalSheet.getRecords().addAll(map.values());
         }
+        computeUniqueCounts(finalSheet);
         return finalSheet;
     }
 
     private Map<String, List<String>> getRecordMap(List<List<String>> records) {
-        Map<String, List<String>> map = new HashMap<>();
+        Map<String, List<String>> map = new LinkedHashMap<>();
         for (List<String> record : records) {
             if (CollectionUtils.isNotEmpty(record)) {
                 String key = getRecordMapKey(record);
@@ -90,16 +93,6 @@ public class ItemSummaryProcessor extends AbstractExcelProcessor {
                 double recordVal = NumberUtils.toDouble(record.get(k));
                 double mapListVal = NumberUtils.toDouble(mapList.get(k));
                 mapList.add(k, String.valueOf(recordVal + mapListVal));
-            }
-        }
-    }
-
-    private void mergeSummary(ItemSummarySheet sheet, LinkedList<DataPair> summaryList) {
-        for (int j = 0; j < sheet.getSummaryList().size(); j++) {
-            DataPair dataPair = sheet.getSummaryList().get(j);
-            if (StringUtils.isNotEmpty(dataPair.getValue())) {
-                DataPair finalPair = summaryList.get(j);
-                finalPair.setValue(String.valueOf(NumberUtils.toDouble(dataPair.getValue()) + NumberUtils.toDouble(finalPair.getValue())));
             }
         }
     }

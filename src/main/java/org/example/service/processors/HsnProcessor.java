@@ -1,14 +1,16 @@
 package org.example.service.processors;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.example.model.DataPair;
 import org.example.model.GstSheet;
 import org.example.model.HsnSheet;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User : Manish K. Gupta
@@ -38,7 +40,7 @@ public class HsnProcessor extends AbstractExcelProcessor {
         LinkedList<DataPair> summaryList = finalSheet.getSummaryList();
         if (gstSheets.size() > 1) {
             if (finalSheet.getRecords() == null) {
-                finalSheet.setRecords(new ArrayList<>());
+                finalSheet.setRecords(new LinkedList<>());
             }
             Map<String, List<String>> map = getRecordMap(finalSheet.getRecords());
             for (int i = 1; i < gstSheets.size(); i++) {
@@ -49,11 +51,12 @@ public class HsnProcessor extends AbstractExcelProcessor {
             finalSheet.getRecords().clear();
             finalSheet.getRecords().addAll(map.values());
         }
+        computeUniqueCounts(finalSheet);
         return finalSheet;
     }
 
     private Map<String, List<String>> getRecordMap(List<List<String>> records) {
-        Map<String, List<String>> map = new HashMap<>();
+        Map<String, List<String>> map = new LinkedHashMap<>();
         for (List<String> record : records) {
             if (CollectionUtils.isNotEmpty(record)) {
                 String key = getRecordMapKey(record);
@@ -75,12 +78,13 @@ public class HsnProcessor extends AbstractExcelProcessor {
             return;
         }
         for (List<String> record : sheet.getRecords()) {
-            if (record != null) {
+            if (record == null) {
                 continue;
             }
-            List<String> mapList = map.get(record.get(0));
+            String key = getRecordMapKey(record);
+            List<String> mapList = map.get(key);
             if (mapList == null) {
-                map.put(getRecordMapKey(record), record);
+                map.put(key, record);
                 continue;
             }
             for (int k = 3; k < record.size(); k++) {
@@ -94,15 +98,6 @@ public class HsnProcessor extends AbstractExcelProcessor {
         }
     }
 
-    private void mergeSummary(HsnSheet sheet, LinkedList<DataPair> summaryList) {
-        for (int j = 0; j < sheet.getSummaryList().size(); j++) {
-            DataPair dataPair = sheet.getSummaryList().get(j);
-            if (StringUtils.isNotEmpty(dataPair.getValue())) {
-                DataPair finalPair = summaryList.get(j);
-                finalPair.setValue(String.valueOf(NumberUtils.toDouble(dataPair.getValue()) + NumberUtils.toDouble(finalPair.getValue())));
-            }
-        }
-    }
 
     @Override
     public void write(Sheet wbSheet, GstSheet gstSheet) {
