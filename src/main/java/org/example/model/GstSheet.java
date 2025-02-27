@@ -34,6 +34,10 @@ public abstract class GstSheet implements Serializable {
 
     public abstract int getSummaryRow();
 
+    public int[] getUniqueCountIndexes() {
+        return null;
+    }
+
     public boolean isSummaryInLastRow() {
         return false;
     }

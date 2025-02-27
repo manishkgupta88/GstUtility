@@ -22,4 +22,6 @@ public class B2BSheet extends GstSheet {
     private final int columnPairCount = 13;
     private final int headerCount = 13;
     private final int dataStartRow = 4;
+    private final int[] uniqueCountIndexes = {0};
+
 }

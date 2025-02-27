@@ -22,5 +22,5 @@ public class B2ClSheet extends GstSheet {
     private final int summaryRow = 2;
     private final int columnPairCount = 8;
     private final int headerCount = 9;
-
+    private final int[] uniqueCountIndexes = {0};
 }

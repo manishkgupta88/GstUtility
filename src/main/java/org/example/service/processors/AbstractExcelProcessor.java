@@ -127,6 +127,17 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
                 }
             }
         }
+        computeUniqueCounts(finalSheet);
         return finalSheet;
+    }
+
+    private void computeUniqueCounts(GstSheet finalSheet) {
+        if (finalSheet.getUniqueCountIndexes() == null) {
+            return;
+        }
+        for (int index : finalSheet.getUniqueCountIndexes()) {
+            int uniqueCount = Helper.getUniqueCountFromList(finalSheet.getRecords(), index);
+            finalSheet.getSummaryList().get(0).setValue(String.valueOf(uniqueCount));
+        }
     }
 }

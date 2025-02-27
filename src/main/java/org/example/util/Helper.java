@@ -1,10 +1,14 @@
 package org.example.util;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 
 import java.io.File;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * User : Manish K. Gupta
@@ -48,4 +52,15 @@ public class Helper {
         return os.contains("win") ? Constants.ExcelFile.WindowsOutputFile : Constants.ExcelFile.LinuxOutputFile;
     }
 
+    public static int getUniqueCountFromList(List<List<String>> records, int index) {
+        if (CollectionUtils.isEmpty(records)) {
+            return 0;
+        }
+        return records.stream()
+                .filter(record -> record != null && record.size() > index && StringUtils.isNotEmpty(record.get(index)))
+                .map(record -> record.get(index))
+                .collect(Collectors.toSet())
+                .size();
+
+    }
 }

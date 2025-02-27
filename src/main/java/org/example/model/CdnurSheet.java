@@ -22,4 +22,5 @@ public class CdnurSheet extends GstSheet {
     private final int summaryRow = 2;
     private final int columnPairCount = 10;
     private final int headerCount = 10;
+    private final int[] uniqueCountIndexes = {1};
 }

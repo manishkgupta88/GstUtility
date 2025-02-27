@@ -24,6 +24,7 @@ public class ItemSummarySheet extends GstSheet {
     private final int summaryRow = 2;
     private final int columnPairCount = 11;
     private final int headerCount = 11;
+    private final int[] uniqueCountIndexes = {0};
     private Map<ItemHsnKey, ItemHsn> hsnMap;
 
     public ItemHsnKey getItemHsnKey(String hsn, String rate) {
