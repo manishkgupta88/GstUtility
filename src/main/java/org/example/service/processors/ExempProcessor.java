@@ -81,7 +81,7 @@ public class ExempProcessor extends AbstractExcelProcessor {
             for (int k = 1; k < record.size(); k++) {
                 double recordVal = NumberUtils.toDouble(record.get(k));
                 double mapListVal = NumberUtils.toDouble(mapList.get(k));
-                mapList.add(k, String.valueOf(recordVal + mapListVal));
+                mapList.set(k, String.valueOf(recordVal + mapListVal));
             }
         }
     }
