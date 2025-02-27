@@ -7,7 +7,7 @@ package org.example.util;
 public interface Constants {
 
     interface ExcelFile {
-        int MaxSheets = 12;
+        int MaxSheets = 11;
         int GstR1Sheet = 0;
         int B2BSheet = 1;
         int B2ClSheet = 2;

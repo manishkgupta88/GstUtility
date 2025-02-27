@@ -10,7 +10,7 @@ import org.example.util.Helper;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -39,7 +39,7 @@ public class ExcelConsolidator {
             for (int sheetCount = 0; sheetCount < Constants.ExcelFile.MaxSheets; sheetCount++) {
                 IExcelProcessor processor = ExcelProcessorFactory.getExcelProcessor(sheetCount);
                 List<GstSheet> objs = readSheetInAllFiles(folder, processor, sheetCount);
-//                GstSheet gstSheet = processor.merge(objs);
+                GstSheet gstSheet = processor.merge(objs);
 //                Sheet wbSheet = workbook.createSheet(gstSheet.getName());
 //                processor.write(wbSheet, gstSheet);
             }
@@ -51,7 +51,7 @@ public class ExcelConsolidator {
     }
 
     private List<GstSheet> readSheetInAllFiles(File folder, IExcelProcessor processor, int sheetCount) throws Exception {
-        List<GstSheet> objs = new ArrayList<>();
+        List<GstSheet> objs = new LinkedList<>();
         int fileCount = 0;
         for (File file : folder.listFiles()) {
             if (!file.getName().endsWith("xls") && !file.getName().endsWith("xlsx")) {
