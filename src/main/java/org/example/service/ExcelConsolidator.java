@@ -30,7 +30,7 @@ public class ExcelConsolidator {
             return;
         }
         System.out.println("Folder " + folder.getPath() + "accessed and read");
-        processFiles(folder);
+        //processFiles(folder);
     }
 
     private void processFiles(File folder) {

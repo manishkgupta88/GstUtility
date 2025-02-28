@@ -9,7 +9,7 @@ import org.example.model.HsnSheet;
 
 public class HsnProcessor extends AbstractItemProcessor {
     @Override
-    public GstSheet getSheetObj() {
+    public GstSheet getGstSheetObj() {
         return new HsnSheet();
     }
 }

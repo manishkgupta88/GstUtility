@@ -9,7 +9,7 @@ import org.example.model.ItemSummarySheet;
 
 public class ItemSummaryProcessor extends AbstractItemProcessor {
     @Override
-    public GstSheet getSheetObj() {
+    public GstSheet getGstSheetObj() {
         return new ItemSummarySheet();
     }
 }

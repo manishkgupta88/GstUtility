@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class ExempProcessor extends AbstractExcelProcessor {
     @Override
-    public GstSheet getSheetObj() {
+    public GstSheet getGstSheetObj() {
         return new ExempSheet();
     }
 

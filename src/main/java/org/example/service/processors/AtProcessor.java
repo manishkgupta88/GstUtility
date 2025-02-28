@@ -10,7 +10,7 @@ import org.example.model.GstSheet;
 public class AtProcessor extends AbstractExcelProcessor {
 
     @Override
-    public GstSheet getSheetObj() {
+    public GstSheet getGstSheetObj() {
         return new AtSheet();
     }
 }

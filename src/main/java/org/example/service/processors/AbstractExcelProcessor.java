@@ -20,14 +20,14 @@ import java.util.List;
 
 public abstract class AbstractExcelProcessor implements IExcelProcessor {
 
-    public abstract GstSheet getgstSheet();
+    public abstract GstSheet getGstSheetObj();
 
     @Override
     public GstSheet read(Sheet sheet) {
         if (sheet == null) {
             return null;
         }
-        GstSheet gstSheet = getgstSheet();
+        GstSheet gstSheet = getGstSheetObj();
         readRowPairs(sheet, gstSheet);
         readColumnPairs(sheet, gstSheet);
         if (!gstSheet.isSummaryInLastRow()) {
@@ -150,7 +150,7 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
         return finalSheet;
     }
 
-    private void mergeSummary(GstSheet sheet, LinkedList<DataPair> summaryList) {
+    protected void mergeSummary(GstSheet sheet, LinkedList<DataPair> summaryList) {
         for (int j = 0; j < sheet.getSummaryList().size(); j++) {
             DataPair dataPair = sheet.getSummaryList().get(j);
             if (StringUtils.isNotEmpty(dataPair.getValue())) {
@@ -160,7 +160,7 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
         }
     }
 
-    private void computeUniqueCounts(GstSheet finalSheet) {
+    protected void computeUniqueCounts(GstSheet finalSheet) {
         if (finalSheet.getUniqueCountIndexes() == null) {
             return;
         }

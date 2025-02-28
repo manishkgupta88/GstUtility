@@ -9,7 +9,7 @@ import org.example.model.GstSheet;
 
 public class CdnrProcessor extends AbstractExcelProcessor {
     @Override
-    public GstSheet getSheetObj() {
+    public GstSheet getGstSheetObj() {
         return new CdnrSheet();
     }
 }
