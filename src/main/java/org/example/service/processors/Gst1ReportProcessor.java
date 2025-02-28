@@ -1,6 +1,5 @@
 package org.example.service.processors;
 
-import org.apache.poi.ss.usermodel.Sheet;
 import org.example.model.GstR1Report;
 import org.example.model.GstSheet;
 
@@ -11,23 +10,11 @@ import org.example.model.GstSheet;
 public class Gst1ReportProcessor extends AbstractExcelProcessor {
 
     @Override
-    public GstSheet read(Sheet sheet) {
-        if (sheet == null) {
-            return null;
-        }
-        GstR1Report sheetObj = new GstR1Report();
-        readRowPairs(sheet, sheetObj);
-        readTableHeaders(sheet, sheetObj);
-        readRecords(sheet, sheetObj);
-        readSummary(sheet, sheetObj);
-        return sheetObj;
+    public GstSheet getSheetObj() {
+        return new GstR1Report();
     }
 
-    @Override
-    public void write(Sheet wbSheet, GstSheet gstSheet) {
-        System.out.println("test");
-
-        /*
+            /*
 
         // Creating header row
         Row headerRow = sheet.createRow(rowNum++);
@@ -60,5 +47,5 @@ public class Gst1ReportProcessor extends AbstractExcelProcessor {
         return style;
     }
          */
-    }
+
 }

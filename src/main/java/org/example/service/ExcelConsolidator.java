@@ -40,8 +40,8 @@ public class ExcelConsolidator {
                 IExcelProcessor processor = ExcelProcessorFactory.getExcelProcessor(sheetCount);
                 List<GstSheet> objs = readSheetInAllFiles(folder, processor, sheetCount);
                 GstSheet gstSheet = processor.merge(objs);
-//                Sheet wbSheet = workbook.createSheet(gstSheet.getName());
-//                processor.write(wbSheet, gstSheet);
+                Sheet wbSheet = workbook.createSheet(gstSheet.getName());
+                processor.write(wbSheet, gstSheet);
             }
             createOutputFile(workbook, folder.getPath());
         } catch (Exception e) {
@@ -61,7 +61,8 @@ public class ExcelConsolidator {
             ++fileCount;
             Workbook workbook = new XSSFWorkbook(file);
             Sheet sheet = workbook.getSheetAt(sheetCount);
-            System.out.println("Processing sheet: '" + sheet.getSheetName() + "' from file: '" + file.getName() + "'");
+            System.out.println("Processing sheet " + fileCount + " with name '" + sheet.getSheetName() + "' from " +
+                    "file: '" + file.getName() + "'");
             if (processor == null) {
                 System.out.println("Could not find processor for sheet: " + sheet.getSheetName());
                 throw new Exception("Processor not found");

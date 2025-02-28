@@ -38,6 +38,6 @@ public abstract class GstSheet implements Serializable {
     }
 
     public boolean isSummaryInLastRow() {
-        return false;
+        return getSummaryRow() == -1;
     }
 }

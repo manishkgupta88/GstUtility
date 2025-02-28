@@ -19,17 +19,8 @@ import java.util.Map;
 
 public class ExempProcessor extends AbstractExcelProcessor {
     @Override
-    public GstSheet read(Sheet sheet) {
-        if (sheet == null) {
-            return null;
-        }
-        ExempSheet sheetObj = new ExempSheet();
-        readRowPairs(sheet, sheetObj);
-        readColumnPairs(sheet, sheetObj);
-        readSummary(sheet, sheetObj);
-        readTableHeaders(sheet, sheetObj);
-        readRecords(sheet, sheetObj);
-        return sheetObj;
+    public GstSheet getSheetObj() {
+        return new ExempSheet();
     }
 
     @Override
@@ -94,10 +85,5 @@ public class ExempProcessor extends AbstractExcelProcessor {
                 finalPair.setValue(String.valueOf(NumberUtils.toDouble(dataPair.getValue()) + NumberUtils.toDouble(finalPair.getValue())));
             }
         }
-    }
-
-    @Override
-    public void write(Sheet wbSheet, GstSheet gstSheet) {
-
     }
 }
