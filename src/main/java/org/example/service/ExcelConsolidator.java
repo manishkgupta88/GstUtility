@@ -30,7 +30,7 @@ public class ExcelConsolidator {
             return;
         }
         System.out.println("Folder " + folder.getPath() + "accessed and read");
-        //processFiles(folder);
+        processFiles(folder);
     }
 
     private void processFiles(File folder) {
@@ -61,8 +61,8 @@ public class ExcelConsolidator {
             ++fileCount;
             Workbook workbook = new XSSFWorkbook(file);
             Sheet sheet = workbook.getSheetAt(sheetCount);
-            System.out.println("Processing sheet " + fileCount + " with name '" + sheet.getSheetName() + "' from " +
-                    "file: '" + file.getName() + "'");
+            System.out.println("Processing sheet " + sheetCount + " with name '" + sheet.getSheetName() + "' from " +
+                    "file: " + fileCount + " with file name: '" + file.getName() + "'");
             if (processor == null) {
                 System.out.println("Could not find processor for sheet: " + sheet.getSheetName());
                 throw new Exception("Processor not found");
@@ -72,13 +72,14 @@ public class ExcelConsolidator {
                 gstSheet.setName(sheet.getSheetName());
                 objs.add(gstSheet);
             }
+            workbook.close();
         }
         return objs;
     }
 
     private void createOutputFile(Workbook workbook, String path) {
         String outputPath =
-                Helper.getOutputPath(path).concat(File.separator).concat(Constants.ExcelFile.OutputFileName).concat(String.valueOf(System.currentTimeMillis())).concat(".xls");
+                Helper.getOutputPath(path).concat(File.separator).concat(Constants.ExcelFile.OutputFileName).concat(String.valueOf(System.currentTimeMillis())).concat(".xlsx");
         System.out.println("Output file " + outputPath);
         FileOutputStream outputStream = null;
         try {

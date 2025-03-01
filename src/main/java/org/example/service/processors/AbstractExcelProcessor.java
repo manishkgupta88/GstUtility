@@ -209,7 +209,7 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
     }
 
     private void writeColumnPairs(Sheet sheet, GstSheet gstSheet) {
-        if (gstSheet.getCpRow() == -1 && CollectionUtils.isEmpty(gstSheet.getColumnPairs())) {
+        if (gstSheet.getCpRow() == -1 || CollectionUtils.isEmpty(gstSheet.getColumnPairs())) {
             System.out.println("Skipping the column pairs as it is not defined for sheet : " + sheet.getSheetName());
             return;
         }
@@ -268,7 +268,7 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
             if (CollectionUtils.isEmpty(cellDataList)) {
                 continue;
             }
-            for (int j = 0; j < gstSheet.getHeaderCount(); j++) {
+            for (int j = 0; j < gstSheet.getHeaderCount() && j < cellDataList.size(); j++) {
                 Cell cell = row.createCell(j);
                 String str = cellDataList.get(j);
                 if (StringUtils.isBlank(str)) {
