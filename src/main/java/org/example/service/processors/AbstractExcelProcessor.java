@@ -3,10 +3,7 @@ package org.example.service.processors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.*;
 import org.example.model.DataPair;
 import org.example.model.GstSheet;
 import org.example.service.IExcelProcessor;
@@ -282,6 +279,7 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
             return;
         }
         Row row = null;
+        CellStyle textStyle = getTextCellStyle(sheet, gstSheet);
         for (int i = 0; i < gstSheet.getRecords().size(); i++) {
             LinkedList<DataPair> cellDataList = gstSheet.getRecords().get(i);
             row = sheet.createRow(i + gstSheet.getDataStartRow());
@@ -291,7 +289,24 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
             for (int j = 0; j < gstSheet.getHeaderCount() && j < cellDataList.size(); j++) {
                 Cell cell = row.createCell(j);
                 populateCellValue(cellDataList.get(j), cell);
+                if (gstSheet.getTextTypeCells() != null && textStyle != null) {
+                    for (Integer index : gstSheet.getTextTypeCells()) {
+                        if (index == j) {
+                            cell.setCellStyle(textStyle);
+                        }
+                    }
+                }
             }
         }
+    }
+
+    private CellStyle getTextCellStyle(Sheet sheet, GstSheet gstSheet) {
+        CellStyle textStyle = null;
+        if (gstSheet.getTextTypeCells() != null) {
+            Workbook workbook = sheet.getWorkbook();
+            textStyle = workbook.createCellStyle();
+            textStyle.setDataFormat(workbook.createDataFormat().getFormat("@"));
+        }
+        return textStyle;
     }
 }

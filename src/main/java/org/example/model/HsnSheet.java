@@ -3,10 +3,8 @@ package org.example.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.Serial;
-import java.util.Map;
 
 /**
  * User : Manish K. Gupta
@@ -25,10 +23,5 @@ public class HsnSheet extends GstSheet {
     private final int columnPairCount = 11;
     private final int headerCount = 11;
     private final int[] uniqueCountIndexes = {0};
-
-    private Map<ItemHsnKey, ItemHsn> hsnMap;
-
-    public ItemHsnKey getItemHsnKey(String hsn, String rate) {
-        return new ItemHsnKey(hsn, NumberUtils.toInt(rate));
-    }
+    private final int[] textTypeCells = {0};
 }
