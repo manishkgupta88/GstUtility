@@ -3,7 +3,6 @@ package org.example.service.processors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.example.model.DataPair;
 import org.example.model.ExempSheet;
 import org.example.model.GstSheet;
@@ -34,7 +33,7 @@ public class ExempProcessor extends AbstractExcelProcessor {
             if (finalSheet.getRecords() == null) {
                 finalSheet.setRecords(new LinkedList<>());
             }
-            Map<String, List<String>> map = getRecordMap(finalSheet.getRecords());
+            Map<String, LinkedList<DataPair>> map = getRecordMap(finalSheet.getRecords());
             for (int i = 1; i < gstSheets.size(); i++) {
                 ExempSheet sheet = (ExempSheet) gstSheets.get(i);
                 mergeRecordList(sheet, map);
@@ -46,33 +45,33 @@ public class ExempProcessor extends AbstractExcelProcessor {
         return finalSheet;
     }
 
-    private Map<String, List<String>> getRecordMap(List<List<String>> records) {
-        Map<String, List<String>> map = new HashMap<>();
-        for (List<String> record : records) {
+    private Map<String, LinkedList<DataPair>> getRecordMap(List<LinkedList<DataPair>> records) {
+        Map<String, LinkedList<DataPair>> map = new HashMap<>();
+        for (LinkedList<DataPair> record : records) {
             if (record != null) {
-                map.put(record.get(0), record);
+                map.put(record.get(0).getValue(), record);
             }
         }
         return map;
     }
 
-    private void mergeRecordList(ExempSheet sheet, Map<String, List<String>> map) {
+    private void mergeRecordList(ExempSheet sheet, Map<String, LinkedList<DataPair>> map) {
         if (sheet.getRecords() == null) {
             return;
         }
-        for (List<String> record : sheet.getRecords()) {
+        for (LinkedList<DataPair> record : sheet.getRecords()) {
             if (record != null) {
                 continue;
             }
-            List<String> mapList = map.get(record.get(0));
+            LinkedList<DataPair> mapList = map.get(record.get(0).getValue());
             if (mapList == null) {
-                map.put(record.get(0), record);
+                map.put(record.get(0).getValue(), record);
                 continue;
             }
             for (int k = 1; k < record.size(); k++) {
-                double recordVal = NumberUtils.toDouble(record.get(k));
-                double mapListVal = NumberUtils.toDouble(mapList.get(k));
-                mapList.set(k, String.valueOf(recordVal + mapListVal));
+                double recordVal = NumberUtils.toDouble(record.get(k).getValue());
+                double mapListVal = NumberUtils.toDouble(mapList.get(k).getValue());
+                mapList.set(k, mapList.get(k).setValue(String.valueOf(recordVal + mapListVal)));
             }
         }
     }

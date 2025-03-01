@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * User : Manish K. Gupta
@@ -15,11 +14,11 @@ import java.util.List;
 @NoArgsConstructor
 public abstract class GstSheet implements Serializable {
     private String name;
-    private LinkedList<DataPair> summaryList = new LinkedList<DataPair>();
-    private LinkedList<DataPair> rowPairs = new LinkedList<DataPair>();
-    private LinkedList<DataPair> columnPairs = new LinkedList<DataPair>();
-    private LinkedList<DataPair> tableHeaders = new LinkedList<DataPair>();
-    private List<List<String>> records = new LinkedList<>();
+    private LinkedList<DataPair> summaryList = new LinkedList<>();
+    private LinkedList<LinkedList<DataPair>> rowPairs = new LinkedList<>();
+    private LinkedList<DataPair> columnPairs = new LinkedList<>();
+    private LinkedList<DataPair> tableHeaders = new LinkedList<>();
+    private LinkedList<LinkedList<DataPair>> records = new LinkedList<>();
 
     public abstract int getRowPairCount();
 

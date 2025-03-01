@@ -4,6 +4,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.example.model.DataPair;
@@ -44,11 +45,12 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
     private void readRowPairs(Sheet sheet, GstSheet gstSheet) {
         for (int i = 0; i < gstSheet.getRowPairCount(); i++) {
             Row row = sheet.getRow(i);
+            LinkedList<DataPair> dataList = new LinkedList<>();
             if (row != null) {
-                gstSheet.getRowPairs().add(new DataPair().setLabel(Helper.getCellValueAsString(row.getCell(0))).setValue(Helper.getCellValueAsString(row.getCell(1))));
-            } else {
-                gstSheet.getRowPairs().add(new DataPair());
+                dataList.add(Helper.getCellData(row.getCell(0)));
+                dataList.add(Helper.getCellData(row.getCell(1)));
             }
+            gstSheet.getRowPairs().add(dataList);
         }
     }
 
@@ -57,15 +59,11 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
             System.out.println("Skipping the column pairs as it is not defined for sheet : " + sheet.getSheetName());
             return;
         }
-        Row labelRow = sheet.getRow(gstSheet.getCpRow());
-        if (labelRow != null) {
+        Row row = sheet.getRow(gstSheet.getCpRow());
+        if (row != null) {
             for (int i = 0; i < gstSheet.getColumnPairCount(); i++) {
-                String val = Helper.getCellValueAsString(labelRow.getCell(i));
-                if (StringUtils.isEmpty(val)) {
-                    gstSheet.getColumnPairs().add(new DataPair());
-                } else {
-                    gstSheet.getColumnPairs().add(new DataPair().setLabel(val));
-                }
+                Cell cell = row.getCell(i);
+                gstSheet.getColumnPairs().add(Helper.getCellData(cell));
             }
         }
     }
@@ -78,21 +76,7 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
         Row summrayRow = sheet.getRow(rc);
         if (summrayRow != null) {
             for (int i = 0; i < gstSheet.getColumnPairCount(); i++) {
-                String val = Helper.getCellValueAsString(summrayRow.getCell(i));
-                if (gstSheet.isSummaryInLastRow()) {
-                    if (i == 0 || StringUtils.isEmpty(val)) {
-                        gstSheet.getSummaryList().add(new DataPair().setLabel(val));
-                    } else {
-                        gstSheet.getSummaryList().add(new DataPair().setValue(val));
-                    }
-                } else {
-                    if (StringUtils.isEmpty(val)) {
-                        gstSheet.getSummaryList().add(new DataPair().setLabel(val));
-                    } else {
-                        gstSheet.getSummaryList().add(new DataPair().setValue(val));
-                    }
-                }
-
+                gstSheet.getSummaryList().add(Helper.getCellData(summrayRow.getCell(i)));
             }
         }
     }
@@ -100,27 +84,24 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
     private void readTableHeaders(Sheet sheet, GstSheet gstSheet) {
         Row row = sheet.getRow(gstSheet.getDataStartRow() - 1);
         for (int i = 0; i < gstSheet.getHeaderCount(); i++) {
-            gstSheet.getTableHeaders().add(new DataPair().setLabel(Helper.getCellValueAsString(row.getCell(i))));
+            gstSheet.getTableHeaders().add(Helper.getCellData(row.getCell(i)));
         }
     }
 
     private void readRecords(Sheet sheet, GstSheet gstSheet) {
-        Row row = null;
         for (int rc = gstSheet.getDataStartRow(); ; rc++) {
-            row = sheet.getRow(rc);
-            List<String> cellDataList = new LinkedList<>();
+            Row row = sheet.getRow(rc);
             if (rc > sheet.getLastRowNum()) {
                 return;
             }
-            if (row == null) {
-                cellDataList.add(null);
-            } else {
+            LinkedList<DataPair> cellDataList = new LinkedList<>();
+            if (row != null) {
                 for (int i = 0; i < gstSheet.getHeaderCount(); i++) {
-                    String val = Helper.getCellValueAsString(row.getCell(i));
-                    if (gstSheet.isSummaryInLastRow() && i == 1 && StringUtils.isEmpty(val)) {
+                    DataPair dataPair = Helper.getCellData(row.getCell(i));
+                    if (gstSheet.isSummaryInLastRow() && i == 1 && StringUtils.isEmpty(dataPair.getValue())) {
                         return;
                     } else {
-                        cellDataList.add(val);
+                        cellDataList.add(dataPair);
                     }
                 }
             }
@@ -141,7 +122,23 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
             for (int i = 1; i < gstSheets.size(); i++) {
                 GstSheet sheet = gstSheets.get(i);
                 if (sheet.getRecords() != null) {
-                    finalSheet.getRecords().addAll(sheet.getRecords());
+                    if (finalSheet.getRecords().size() >= 2) {
+                        LinkedList<DataPair> data = finalSheet.getRecords().get(finalSheet.getRecords().size() - 1);
+                        if (CollectionUtils.isEmpty(data)) {
+                            finalSheet.getRecords().remove(finalSheet.getRecords().size() - 1);
+                        }
+                    }
+                    if (finalSheet.getRecords().size() > 1) {
+                        for (int j = 0; j < sheet.getRecords().size(); j++) {
+                            LinkedList<DataPair> record = sheet.getRecords().get(j);
+                            if (j == 0 && CollectionUtils.isEmpty(record)) {
+                                continue;
+                            }
+                            finalSheet.getRecords().add(record);
+                        }
+                    } else {
+                        finalSheet.getRecords().addAll(sheet.getRecords());
+                    }
                 }
                 mergeSummary(sheet, summaryList);
             }
@@ -194,15 +191,31 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
             return;
         }
         int rc = 0, cc;
-        for (DataPair dataPair : gstSheet.getRowPairs()) {
+        for (LinkedList<DataPair> dataPairList : gstSheet.getRowPairs()) {
             cc = 0;
             Row row = sheet.createRow(rc++);
-            if (StringUtils.isNotEmpty(dataPair.getLabel())) {
-                Cell cell = row.createCell(cc++);
-                cell.setCellValue(dataPair.getLabel());
+            if (CollectionUtils.isEmpty(dataPairList)) {
+                continue;
             }
-            if (StringUtils.isNotEmpty(dataPair.getValue())) {
-                Cell cell = row.createCell(cc);
+            for (DataPair dataPair : dataPairList) {
+                Cell cell = row.createCell(cc++);
+                populateCellValue(dataPair, cell);
+            }
+        }
+    }
+
+    private void populateCellValue(DataPair dataPair, Cell cell) {
+        if (dataPair == null || StringUtils.isEmpty(dataPair.getValue())) {
+            cell.setBlank();
+        } else {
+            if (dataPair.getType() == CellType.NUMERIC) {
+                Double valDbl = NumberUtils.toDouble(dataPair.getValue(), 0.0);
+                if (valDbl == valDbl.intValue()) {
+                    cell.setCellValue(valDbl.intValue());
+                } else {
+                    cell.setCellValue(valDbl);
+                }
+            } else {
                 cell.setCellValue(dataPair.getValue());
             }
         }
@@ -217,11 +230,7 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
         int cc = 0;
         for (DataPair dataPair : gstSheet.getColumnPairs()) {
             Cell cell = row.createCell(cc++);
-            if (StringUtils.isNotEmpty(dataPair.getLabel())) {
-                cell.setCellValue(dataPair.getLabel());
-            } else {
-                cell.setBlank();
-            }
+            populateCellValue(dataPair, cell);
         }
     }
 
@@ -236,11 +245,7 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
         for (int i = 0; i < gstSheet.getSummaryList().size(); i++) {
             DataPair dataPair = gstSheet.getSummaryList().get(i);
             Cell cell = row.createCell(i);
-            if (dataPair == null || StringUtils.isBlank(dataPair.getValue())) {
-                cell.setBlank();
-            } else {
-                cell.setCellValue(dataPair.getValue());
-            }
+            populateCellValue(dataPair, cell);
         }
     }
 
@@ -251,8 +256,9 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
         }
         Row row = sheet.createRow(gstSheet.getDataStartRow() - 1);
         for (int i = 0; i < gstSheet.getHeaderCount(); i++) {
+            sheet.autoSizeColumn(i);
             Cell cell = row.createCell(i);
-            cell.setCellValue(gstSheet.getTableHeaders().get(i).getLabel());
+            populateCellValue(gstSheet.getTableHeaders().get(i), cell);
         }
     }
 
@@ -263,19 +269,14 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
         }
         Row row = null;
         for (int i = 0; i < gstSheet.getRecords().size(); i++) {
+            LinkedList<DataPair> cellDataList = gstSheet.getRecords().get(i);
             row = sheet.createRow(i + gstSheet.getDataStartRow());
-            List<String> cellDataList = gstSheet.getRecords().get(i);
             if (CollectionUtils.isEmpty(cellDataList)) {
                 continue;
             }
             for (int j = 0; j < gstSheet.getHeaderCount() && j < cellDataList.size(); j++) {
                 Cell cell = row.createCell(j);
-                String str = cellDataList.get(j);
-                if (StringUtils.isBlank(str)) {
-                    cell.setBlank();
-                } else {
-                    cell.setCellValue(str);
-                }
+                populateCellValue(cellDataList.get(j), cell);
             }
         }
     }

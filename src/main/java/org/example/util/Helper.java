@@ -2,12 +2,12 @@ package org.example.util;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.example.model.DataPair;
 
 import java.io.File;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 /**
@@ -16,22 +16,16 @@ import java.util.stream.Collectors;
 
 public class Helper {
 
-    public static String getCellValueAsString(Cell cell) {
+    public static DataPair getCellData(Cell cell) {
         if (cell == null) {
             return null;
         }
+        return new DataPair().setType(cell.getCellType()).setValue(getCellValueAsString(cell));
+    }
+
+    private static String getCellValueAsString(Cell cell) {
         return cell.getCellType() == CellType.STRING ? cell.getStringCellValue() :
                 String.valueOf(cell.getNumericCellValue());
-    }
-
-    public static Double getCellValueAsDouble(Cell cell) {
-        String str = getCellValueAsString(cell);
-        return NumberUtils.toDouble(str, 0.0);
-    }
-
-    public static int getCellValueAsInt(Cell cell) {
-        Double val = getCellValueAsDouble(cell);
-        return val.intValue();
     }
 
     public static String getOutputPath(String path) {
@@ -52,13 +46,13 @@ public class Helper {
         return os.contains("win") ? Constants.ExcelFile.WindowsOutputFile : Constants.ExcelFile.LinuxOutputFile;
     }
 
-    public static int getUniqueCountFromList(List<List<String>> records, int index) {
+    public static int getUniqueCountFromList(LinkedList<LinkedList<DataPair>> records, int index) {
         if (CollectionUtils.isEmpty(records)) {
             return 0;
         }
         return records.stream()
-                .filter(record -> record != null && record.size() > index && StringUtils.isNotEmpty(record.get(index)))
-                .map(record -> record.get(index))
+                .filter(record -> record != null && record.size() > index && StringUtils.isNotEmpty(record.get(index).getValue()))
+                .map(record -> record.get(index).getValue())
                 .collect(Collectors.toSet())
                 .size();
 

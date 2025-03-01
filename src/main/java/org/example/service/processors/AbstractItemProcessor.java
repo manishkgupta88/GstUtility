@@ -26,7 +26,7 @@ public abstract class AbstractItemProcessor extends AbstractExcelProcessor {
             if (finalSheet.getRecords() == null) {
                 finalSheet.setRecords(new LinkedList<>());
             }
-            Map<String, List<String>> map = getRecordMap(finalSheet.getRecords());
+            Map<String, LinkedList<DataPair>> map = getRecordMap(finalSheet.getRecords());
             for (int i = 1; i < gstSheets.size(); i++) {
                 GstSheet sheet = gstSheets.get(i);
                 mergeRecordList(sheet, map);
@@ -39,9 +39,9 @@ public abstract class AbstractItemProcessor extends AbstractExcelProcessor {
         return finalSheet;
     }
 
-    private Map<String, List<String>> getRecordMap(List<List<String>> records) {
-        Map<String, List<String>> map = new LinkedHashMap<>();
-        for (List<String> record : records) {
+    private Map<String, LinkedList<DataPair>> getRecordMap(LinkedList<LinkedList<DataPair>> records) {
+        Map<String, LinkedList<DataPair>> map = new LinkedHashMap<>();
+        for (LinkedList<DataPair> record : records) {
             if (CollectionUtils.isNotEmpty(record)) {
                 mergeMapList(map, record);
             }
@@ -49,18 +49,18 @@ public abstract class AbstractItemProcessor extends AbstractExcelProcessor {
         return map;
     }
 
-    private String getRecordMapKey(List<String> record) {
+    private String getRecordMapKey(LinkedList<DataPair> record) {
         if (record.size() > 5) {
-            return (record.get(0) + ":" + record.get(5));
+            return (record.get(0).getValue() + ":" + record.get(5).getValue());
         }
-        return record.get(0);
+        return record.get(0).getValue();
     }
 
-    private void mergeRecordList(GstSheet sheet, Map<String, List<String>> map) {
+    private void mergeRecordList(GstSheet sheet, Map<String, LinkedList<DataPair>> map) {
         if (sheet.getRecords() == null) {
             return;
         }
-        for (List<String> record : sheet.getRecords()) {
+        for (LinkedList<DataPair> record : sheet.getRecords()) {
             if (record == null) {
                 continue;
             }
@@ -68,9 +68,9 @@ public abstract class AbstractItemProcessor extends AbstractExcelProcessor {
         }
     }
 
-    private void mergeMapList(Map<String, List<String>> map, List<String> record) {
+    private void mergeMapList(Map<String, LinkedList<DataPair>> map, LinkedList<DataPair> record) {
         String key = getRecordMapKey(record);
-        List<String> mapList = map.get(key);
+        LinkedList<DataPair> mapList = map.get(key);
         if (mapList == null) {
             map.put(key, record);
             return;
@@ -79,9 +79,9 @@ public abstract class AbstractItemProcessor extends AbstractExcelProcessor {
             if (k == 5) {
                 continue;
             }
-            double recordVal = NumberUtils.toDouble(record.get(k));
-            double mapListVal = NumberUtils.toDouble(mapList.get(k));
-            mapList.set(k, String.valueOf(recordVal + mapListVal));
+            double recordVal = NumberUtils.toDouble(record.get(k).getValue());
+            double mapListVal = NumberUtils.toDouble(mapList.get(k).getValue());
+            mapList.set(k, mapList.get(k).setValue(String.valueOf(recordVal + mapListVal)));
         }
     }
 }

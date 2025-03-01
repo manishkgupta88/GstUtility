@@ -3,6 +3,7 @@ package org.example.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.apache.poi.ss.usermodel.CellType;
 
 /**
  * User : Manish K. Gupta
@@ -12,6 +13,6 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class DataPair {
-    private String label;
+    private CellType type;
     private String value;
 }
