@@ -2,6 +2,7 @@ package org.example.service.processors;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.poi.ss.usermodel.CellType;
 import org.example.model.DataPair;
 import org.example.model.GstSheet;
 
@@ -21,14 +22,13 @@ public abstract class AbstractItemProcessor extends AbstractExcelProcessor {
             return null;
         }
         GstSheet finalSheet = gstSheets.get(0);
-        LinkedList<DataPair> summaryList = finalSheet.getSummaryList();
-        mergeRecords(gstSheets, finalSheet, summaryList);
+        mergeRecords(gstSheets, finalSheet);
         mergeSummary(gstSheets, finalSheet);
         computeUniqueCounts(finalSheet);
         return finalSheet;
     }
 
-    private void mergeRecords(List<GstSheet> gstSheets, GstSheet finalSheet, LinkedList<DataPair> summaryList) {
+    private void mergeRecords(List<GstSheet> gstSheets, GstSheet finalSheet) {
         if (gstSheets.size() <= 1) {
             return;
         }
@@ -84,9 +84,12 @@ public abstract class AbstractItemProcessor extends AbstractExcelProcessor {
             if (k == 5) {
                 continue;
             }
-            double recordVal = NumberUtils.toDouble(record.get(k).getValue());
-            double mapListVal = NumberUtils.toDouble(mapList.get(k).getValue());
-            mapList.set(k, mapList.get(k).setValue(String.valueOf(recordVal + mapListVal)));
+            DataPair mapPair = mapList.get(k);
+            if (mapPair.getType() == CellType.NUMERIC) {
+                double recordVal = NumberUtils.toDouble(record.get(k).getValue());
+                double mapListVal = NumberUtils.toDouble(mapPair.getValue());
+                mapPair.setValue(String.valueOf(recordVal + mapListVal));
+            }
         }
     }
 }

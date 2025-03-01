@@ -3,6 +3,7 @@ package org.example.service.processors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.poi.ss.usermodel.CellType;
 import org.example.model.DataPair;
 import org.example.model.ExempSheet;
 import org.example.model.GstSheet;
@@ -69,9 +70,12 @@ public class ExempProcessor extends AbstractExcelProcessor {
                 continue;
             }
             for (int k = 1; k < record.size(); k++) {
-                double recordVal = NumberUtils.toDouble(record.get(k).getValue());
-                double mapListVal = NumberUtils.toDouble(mapList.get(k).getValue());
-                mapList.set(k, mapList.get(k).setValue(String.valueOf(recordVal + mapListVal)));
+                DataPair mapPair = mapList.get(k);
+                if (mapPair.getType() == CellType.NUMERIC) {
+                    double recordVal = NumberUtils.toDouble(record.get(k).getValue());
+                    double mapListVal = NumberUtils.toDouble(mapPair.getValue());
+                    mapPair.setValue(String.valueOf(recordVal + mapListVal));
+                }
             }
         }
     }

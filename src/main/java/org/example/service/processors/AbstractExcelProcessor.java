@@ -115,6 +115,7 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
         }
         GstSheet finalSheet = gstSheets.get(0);
         mergeRecords(gstSheets, finalSheet);
+        mergeSummary(gstSheets, finalSheet);
         computeUniqueCounts(finalSheet);
         return finalSheet;
     }
@@ -148,7 +149,6 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
             } else {
                 finalSheet.getRecords().addAll(sheet.getRecords());
             }
-
         }
     }
 
@@ -163,7 +163,9 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
                 DataPair dataPair = sheet.getSummaryList().get(j);
                 if (StringUtils.isNotEmpty(dataPair.getValue())) {
                     DataPair finalPair = summaryList.get(j);
-                    finalPair.setValue(String.valueOf(NumberUtils.toDouble(dataPair.getValue()) + NumberUtils.toDouble(finalPair.getValue())));
+                    if (finalPair.getType() == CellType.NUMERIC) {
+                        finalPair.setValue(String.valueOf(NumberUtils.toDouble(dataPair.getValue()) + NumberUtils.toDouble(finalPair.getValue())));
+                    }
                 }
             }
         }
