@@ -22,21 +22,26 @@ public abstract class AbstractItemProcessor extends AbstractExcelProcessor {
         }
         GstSheet finalSheet = gstSheets.get(0);
         LinkedList<DataPair> summaryList = finalSheet.getSummaryList();
-        if (gstSheets.size() > 1) {
-            if (finalSheet.getRecords() == null) {
-                finalSheet.setRecords(new LinkedList<>());
-            }
-            Map<String, LinkedList<DataPair>> map = getRecordMap(finalSheet.getRecords());
-            for (int i = 1; i < gstSheets.size(); i++) {
-                GstSheet sheet = gstSheets.get(i);
-                mergeRecordList(sheet, map);
-                mergeSummary(sheet, summaryList);
-            }
-            finalSheet.getRecords().clear();
-            finalSheet.getRecords().addAll(map.values());
-        }
+        mergeRecords(gstSheets, finalSheet, summaryList);
+        mergeSummary(gstSheets, finalSheet);
         computeUniqueCounts(finalSheet);
         return finalSheet;
+    }
+
+    private void mergeRecords(List<GstSheet> gstSheets, GstSheet finalSheet, LinkedList<DataPair> summaryList) {
+        if (gstSheets.size() <= 1) {
+            return;
+        }
+        if (finalSheet.getRecords() == null) {
+            finalSheet.setRecords(new LinkedList<>());
+        }
+        Map<String, LinkedList<DataPair>> map = getRecordMap(finalSheet.getRecords());
+        for (int i = 1; i < gstSheets.size(); i++) {
+            GstSheet sheet = gstSheets.get(i);
+            mergeRecordList(sheet, map);
+        }
+        finalSheet.getRecords().clear();
+        finalSheet.getRecords().addAll(map.values());
     }
 
     private Map<String, LinkedList<DataPair>> getRecordMap(LinkedList<LinkedList<DataPair>> records) {

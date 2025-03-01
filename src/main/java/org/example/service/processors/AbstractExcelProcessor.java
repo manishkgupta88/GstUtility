@@ -114,45 +114,57 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
             return null;
         }
         GstSheet finalSheet = gstSheets.get(0);
-        LinkedList<DataPair> summaryList = finalSheet.getSummaryList();
-        if (gstSheets.size() > 1) {
-            if (finalSheet.getRecords() == null) {
-                finalSheet.setRecords(new LinkedList<>());
-            }
-            for (int i = 1; i < gstSheets.size(); i++) {
-                GstSheet sheet = gstSheets.get(i);
-                if (sheet.getRecords() != null) {
-                    if (finalSheet.getRecords().size() >= 2) {
-                        LinkedList<DataPair> data = finalSheet.getRecords().get(finalSheet.getRecords().size() - 1);
-                        if (CollectionUtils.isEmpty(data)) {
-                            finalSheet.getRecords().remove(finalSheet.getRecords().size() - 1);
-                        }
-                    }
-                    if (finalSheet.getRecords().size() > 1) {
-                        for (int j = 0; j < sheet.getRecords().size(); j++) {
-                            LinkedList<DataPair> record = sheet.getRecords().get(j);
-                            if (j == 0 && CollectionUtils.isEmpty(record)) {
-                                continue;
-                            }
-                            finalSheet.getRecords().add(record);
-                        }
-                    } else {
-                        finalSheet.getRecords().addAll(sheet.getRecords());
-                    }
-                }
-                mergeSummary(sheet, summaryList);
-            }
-        }
+        mergeRecords(gstSheets, finalSheet);
         computeUniqueCounts(finalSheet);
         return finalSheet;
     }
 
-    protected void mergeSummary(GstSheet sheet, LinkedList<DataPair> summaryList) {
-        for (int j = 0; j < sheet.getSummaryList().size(); j++) {
-            DataPair dataPair = sheet.getSummaryList().get(j);
-            if (StringUtils.isNotEmpty(dataPair.getValue())) {
-                DataPair finalPair = summaryList.get(j);
-                finalPair.setValue(String.valueOf(NumberUtils.toDouble(dataPair.getValue()) + NumberUtils.toDouble(finalPair.getValue())));
+    private void mergeRecords(List<GstSheet> gstSheets, GstSheet finalSheet) {
+        if (gstSheets.size() <= 1) {
+            return;
+        }
+        if (finalSheet.getRecords() == null) {
+            finalSheet.setRecords(new LinkedList<>());
+        }
+        for (int i = 1; i < gstSheets.size(); i++) {
+            GstSheet sheet = gstSheets.get(i);
+            if (sheet.getRecords() == null) {
+                continue;
+            }
+            if (finalSheet.getRecords().size() >= 2) {
+                LinkedList<DataPair> data = finalSheet.getRecords().get(finalSheet.getRecords().size() - 1);
+                if (CollectionUtils.isEmpty(data)) {
+                    finalSheet.getRecords().remove(finalSheet.getRecords().size() - 1);
+                }
+            }
+            if (finalSheet.getRecords().size() > 1) {
+                for (int j = 0; j < sheet.getRecords().size(); j++) {
+                    LinkedList<DataPair> record = sheet.getRecords().get(j);
+                    if (j == 0 && CollectionUtils.isEmpty(record)) {
+                        continue;
+                    }
+                    finalSheet.getRecords().add(record);
+                }
+            } else {
+                finalSheet.getRecords().addAll(sheet.getRecords());
+            }
+
+        }
+    }
+
+    protected void mergeSummary(List<GstSheet> gstSheets, GstSheet finalSheet) {
+        if (gstSheets.size() <= 1) {
+            return;
+        }
+        LinkedList<DataPair> summaryList = finalSheet.getSummaryList();
+        for (int i = 1; i < gstSheets.size(); i++) {
+            GstSheet sheet = gstSheets.get(i);
+            for (int j = 0; j < sheet.getSummaryList().size(); j++) {
+                DataPair dataPair = sheet.getSummaryList().get(j);
+                if (StringUtils.isNotEmpty(dataPair.getValue())) {
+                    DataPair finalPair = summaryList.get(j);
+                    finalPair.setValue(String.valueOf(NumberUtils.toDouble(dataPair.getValue()) + NumberUtils.toDouble(finalPair.getValue())));
+                }
             }
         }
     }
