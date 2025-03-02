@@ -3,6 +3,8 @@ package org.example.service.processors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.*;
 import org.example.model.DataPair;
 import org.example.model.GstSheet;
@@ -17,12 +19,14 @@ import java.util.List;
  */
 
 public abstract class AbstractExcelProcessor implements IExcelProcessor {
+    private static final Logger logger = LogManager.getLogger(AbstractExcelProcessor.class);
 
     public abstract GstSheet getGstSheetObj();
 
     @Override
     public GstSheet read(Sheet sheet) {
         if (sheet == null) {
+            logger.error("Sheet found null while reading. Returning!");
             return null;
         }
         GstSheet gstSheet = getGstSheetObj();
@@ -40,6 +44,11 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
     }
 
     private void readRowPairs(Sheet sheet, GstSheet gstSheet) {
+        if (gstSheet.getRowPairCount() == -1) {
+            logger.info("Row pair count not defined. Skipping for sheet:" + sheet.getSheetName());
+            return;
+        }
+        logger.info("Reading " + gstSheet.getRowPairCount() + " row pair count");
         for (int i = 0; i < gstSheet.getRowPairCount(); i++) {
             Row row = sheet.getRow(i);
             LinkedList<DataPair> dataList = new LinkedList<>();
@@ -53,7 +62,7 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
 
     private void readColumnPairs(Sheet sheet, GstSheet gstSheet) {
         if (gstSheet.getCpRow() == -1) {
-            System.out.println("Skipping the column pairs as it is not defined for sheet : " + sheet.getSheetName());
+            logger.info("Skipping the column pairs as it is not defined for sheet : " + sheet.getSheetName());
             return;
         }
         Row row = sheet.getRow(gstSheet.getCpRow());

@@ -1,5 +1,7 @@
 package org.example;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.service.ExcelConsolidator;
 import org.example.util.Constants;
 import org.example.util.Helper;
@@ -10,11 +12,15 @@ import java.net.URISyntaxException;
 
 
 public class Trigger {
+    private static final Logger logger = LogManager.getLogger(Trigger.class);
+
     public static void main(String[] args) throws URISyntaxException {
+        logger.info("Starting trigger");
         String folderPath = "Q:\\src\\intellij\\GstUtility\\src\\resources\\gst\\files\\";
+        logger.info("Using path: " + folderPath);
         ExcelConsolidator consolidator = new ExcelConsolidator();
         consolidator.consolidate(folderPath);
-        //testOutPutFile(folderPath);
+        logger.info("Completed");
     }
 
     private static void testOutPutFile(String folderPath) {
