@@ -23,6 +23,10 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
 
     public abstract GstSheet getGstSheetObj();
 
+    public void sheetMerge(GstSheet gstSheet) {
+
+    }
+
     @Override
     public GstSheet read(Sheet sheet) {
         if (sheet == null) {
@@ -123,6 +127,7 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
         mergeRecords(gstSheets, finalSheet);
         mergeSummary(gstSheets, finalSheet);
         computeUniqueCounts(finalSheet);
+        sheetMerge(finalSheet);
         return finalSheet;
     }
 
