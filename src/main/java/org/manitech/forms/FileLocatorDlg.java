@@ -49,10 +49,7 @@ public class FileLocatorDlg extends JFrame {
         clearBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                folderPathTxt.setText(null);
-                outputPathTxt.setText(null);
-                folderPathTxt.setEnabled(false);
-                fileList.setListData(new Vector<>());
+                clearForm();
             }
         });
         processBtn.addActionListener(new ActionListener() {
@@ -63,20 +60,27 @@ public class FileLocatorDlg extends JFrame {
         });
     }
 
+    private void clearForm() {
+        folderPathTxt.setText(null);
+        outputPathTxt.setText(null);
+        folderPathTxt.setEnabled(false);
+        fileList.setListData(new Vector<>());
+    }
+
     private void processFolderPath() {
         String folderPath = folderPathTxt.getText();
         if (StringUtils.isEmpty(folderPath)) {
             JOptionPane.showMessageDialog(null, "Folder path empty", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        dispose();
-//                new CompletedForm(folderPath);
+        //new CompletedForm(folderPath);
         //Q:\src\intellij\GstUtility\src\resources\gst\files
         try {
             ExcelConsolidator consolidator = new ExcelConsolidator();
             consolidator.consolidate(folderPath);
             JOptionPane.showMessageDialog(null, "File created Successfully", "Success",
                     JOptionPane.INFORMATION_MESSAGE);
+            clearForm();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ExceptionUtils.getStackTrace(ex), "Error",
                     JOptionPane.ERROR_MESSAGE);

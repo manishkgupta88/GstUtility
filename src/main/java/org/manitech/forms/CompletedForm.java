@@ -25,8 +25,8 @@ public class CompletedForm extends JFrame {
         setVisible(true);
         redirectLogs();
         //Q:\src\intellij\GstUtility\src\resources\gst\files
-        ExcelConsolidator consolidator = new ExcelConsolidator();
-        consolidator.consolidate(folderPath);
+//        ExcelConsolidator consolidator = new ExcelConsolidator();
+//        consolidator.consolidate(folderPath);
     }
 
     private void redirectLogs() {
