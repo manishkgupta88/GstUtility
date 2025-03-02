@@ -2,10 +2,12 @@ package org.manitech;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.manitech.forms.IntroForm;
 import org.manitech.service.ExcelConsolidator;
 import org.manitech.util.Constants;
 import org.manitech.util.Helper;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URISyntaxException;
@@ -18,23 +20,25 @@ public class Trigger {
         logger.info("Starting trigger");
         String folderPath = "Q:\\src\\intellij\\GstUtility\\src\\resources\\gst\\files\\";
         logger.info("Using path: " + folderPath);
-        ExcelConsolidator consolidator = new ExcelConsolidator();
-        consolidator.consolidate(folderPath);
+        triggerForms();
+        //ExcelConsolidator consolidator = new ExcelConsolidator();
+        //consolidator.consolidate(folderPath);
         logger.info("Completed");
     }
 
-    private static void testOutPutFile(String folderPath) {
-        String outputPath =
-                Helper.getOutputPath(folderPath).concat(File.separator).concat(Constants.ExcelFile.OutputFileName).concat(String.valueOf(System.currentTimeMillis())).concat(".xls");
-        System.out.println("Output path: " + outputPath);
-        FileOutputStream outputStream = null;
+    private static void triggerForms() {
         try {
-            outputStream = new FileOutputStream(outputPath);
-            outputStream.write("Test".getBytes());
-            outputStream.close();
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
         } catch (Exception e) {
-            System.out.print("Error writing the output file");
-            e.printStackTrace();
+            logger.error("Unable to set the look and feel", e);
         }
+        SwingUtilities.invokeLater(() -> {
+            IntroForm form = new IntroForm();  // Replace with your form class name
+        });
     }
 }

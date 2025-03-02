@@ -22,7 +22,7 @@ import java.util.List;
 public class ExcelConsolidator {
     private static final Logger logger = LogManager.getLogger(ExcelConsolidator.class);
 
-    public void consolidate(String path) {
+    public void consolidate(String path) throws Exception {
         if (StringUtils.isEmpty(path)) {
             logger.error("Folder path is empty or invalid");
             return;
@@ -36,7 +36,7 @@ public class ExcelConsolidator {
         processFiles(folder);
     }
 
-    private void processFiles(File folder) {
+    private void processFiles(File folder) throws Exception {
         try {
             Workbook workbook = new XSSFWorkbook();
             for (int sheetCount = 0; sheetCount < Constants.ExcelFile.MaxSheets; sheetCount++) {
@@ -54,6 +54,7 @@ public class ExcelConsolidator {
             createOutputFile(workbook, folder.getPath());
         } catch (Exception e) {
             logger.error("Error processing files", e);
+            throw e;
         }
     }
 
@@ -86,7 +87,7 @@ public class ExcelConsolidator {
         return objs;
     }
 
-    private void createOutputFile(Workbook workbook, String path) {
+    private void createOutputFile(Workbook workbook, String path) throws Exception {
         String outputPath =
                 Helper.getOutputPath(path).concat(File.separator).concat(Constants.ExcelFile.OutputFileName).concat(String.valueOf(System.currentTimeMillis())).concat(".xlsx");
         logger.info("Output file " + outputPath);
@@ -97,6 +98,7 @@ public class ExcelConsolidator {
             outputStream.close();
         } catch (Exception e) {
             logger.error("Error writing the output file", e);
+            throw e;
         }
     }
 }
