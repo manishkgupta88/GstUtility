@@ -37,7 +37,6 @@ public class FileLocatorDlg extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
-        //fileList.setVisible(false);
         fileList.setEnabled(false);
         folderPathTxt.setEnabled(false);
         outputPathTxt.setEnabled(false);
@@ -59,25 +58,29 @@ public class FileLocatorDlg extends JFrame {
         processBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String folderPath = folderPathTxt.getText();
-                if (StringUtils.isEmpty(folderPath)) {
-                    JOptionPane.showMessageDialog(null, "Folder path empty", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                dispose();
-//                new CompletedForm(folderPath);
-                //Q:\src\intellij\GstUtility\src\resources\gst\files
-                try {
-                    ExcelConsolidator consolidator = new ExcelConsolidator();
-                    consolidator.consolidate(folderPath);
-                    JOptionPane.showMessageDialog(null, "File created Successfully", "Success",
-                            JOptionPane.INFORMATION_MESSAGE);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, ExceptionUtils.getStackTrace(ex), "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+                processFolderPath();
             }
         });
+    }
+
+    private void processFolderPath() {
+        String folderPath = folderPathTxt.getText();
+        if (StringUtils.isEmpty(folderPath)) {
+            JOptionPane.showMessageDialog(null, "Folder path empty", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        dispose();
+//                new CompletedForm(folderPath);
+        //Q:\src\intellij\GstUtility\src\resources\gst\files
+        try {
+            ExcelConsolidator consolidator = new ExcelConsolidator();
+            consolidator.consolidate(folderPath);
+            JOptionPane.showMessageDialog(null, "File created Successfully", "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ExceptionUtils.getStackTrace(ex), "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void selectFolder() {
