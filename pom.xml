@@ -74,6 +74,7 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
+                    <include>**/*</include>
                     <include>**/*.xml</include>
                     <include>**/*.xlsx</include>
                 </includes>
