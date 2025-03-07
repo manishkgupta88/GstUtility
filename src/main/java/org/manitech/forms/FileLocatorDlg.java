@@ -36,6 +36,7 @@ public class FileLocatorDlg extends JFrame {
         setSize(500, 350);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setResizable(false);
         setVisible(true);
         fileList.setEnabled(false);
         folderPathTxt.setEnabled(false);
