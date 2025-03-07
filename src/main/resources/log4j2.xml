@@ -23,8 +23,8 @@
             <AppenderRef ref="FileAppender" />
         </Root>
         <!-- Logger for specific package -->
-        <Logger name="com.example.myapp" level="debug">
-            <AppenderRef ref="FileAppender" />
-        </Logger>
+        <Logger name="org.apache.poi.ooxml.POIXMLDocumentPart" level="OFF" />
+<!--            <AppenderRef ref="FileAppender" />-->
+<!--        </Logger>-->
     </Loggers>
 </Configuration>

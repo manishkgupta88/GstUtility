@@ -12,11 +12,11 @@ public class Trigger {
 
     public static void main(String[] args) throws Exception {
         logger.info("Starting trigger");
-        String folderPath = "Q:\\src\\intellij\\GstUtility\\src\\resources\\gst\\files\\";
-        logger.info("Using path: " + folderPath);
         triggerForms();
-//        ExcelConsolidator consolidator = new ExcelConsolidator();
-//        consolidator.consolidate(folderPath);
+        /*String folderPath = "Q:\\src\\intellij\\GstUtility\\src\\resources\\gst\\files\\";
+        logger.info("Using path: " + folderPath);
+        ExcelConsolidator consolidator = new ExcelConsolidator();
+        consolidator.consolidate(folderPath);*/
         logger.info("Completed");
     }
 

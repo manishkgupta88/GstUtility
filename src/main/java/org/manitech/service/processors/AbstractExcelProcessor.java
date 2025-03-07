@@ -52,7 +52,7 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
             logger.info("Row pair count not defined. Skipping for sheet:" + sheet.getSheetName());
             return;
         }
-        logger.info("Reading " + gstSheet.getRowPairCount() + " row pair count");
+        logger.debug("Reading " + gstSheet.getRowPairCount() + " row pair count");
         for (int i = 0; i < gstSheet.getRowPairCount(); i++) {
             Row row = sheet.getRow(i);
             LinkedList<DataPair> dataList = new LinkedList<>();
@@ -197,7 +197,7 @@ public abstract class AbstractExcelProcessor implements IExcelProcessor {
         if (sheet == null || gstSheet == null) {
             return;
         }
-        System.out.println("Writing sheet: " + sheet.getSheetName());
+        logger.info("Writing sheet: " + sheet.getSheetName());
         writeRowPairs(sheet, gstSheet);
         writeColumnPairs(sheet, gstSheet);
         if (!gstSheet.isSummaryInLastRow()) {
