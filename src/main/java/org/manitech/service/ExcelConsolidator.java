@@ -32,7 +32,7 @@ public class ExcelConsolidator {
             logger.error("Folder path does not exist");
             return;
         }
-        logger.info("Folder " + folder.getPath() + "accessed and read");
+        logger.info("Folder " + folder.getPath() + " accessed and read");
         processFiles(folder);
     }
 
@@ -41,7 +41,7 @@ public class ExcelConsolidator {
             Workbook workbook = new XSSFWorkbook();
             for (int sheetCount = 0; sheetCount < Constants.ExcelFile.MaxSheets; sheetCount++) {
                 IExcelProcessor processor = ExcelProcessorFactory.getExcelProcessor(sheetCount);
-                logger.debug("Found processor:" + processor.getClass().getName());
+                logger.info("Found processor:" + processor.getClass().getName());
                 List<GstSheet> objs = readSheetInAllFiles(folder, processor, sheetCount);
                 logger.debug("Sheets read and created list of size:" + objs.size());
                 logger.info("Starting merge for sheet:" + sheetCount);

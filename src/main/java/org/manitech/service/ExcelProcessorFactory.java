@@ -21,6 +21,7 @@ public class ExcelProcessorFactory {
         processorMap.put(Constants.ExcelFile.B2csSheet, new B2csProcessor());
         processorMap.put(Constants.ExcelFile.CdnrSheet, new CdnrProcessor());
         processorMap.put(Constants.ExcelFile.CdnurSheet, new CdnurProcessor());
+        processorMap.put(Constants.ExcelFile.ExpSheet, new ExpProcessor());
         processorMap.put(Constants.ExcelFile.AtSheet, new AtProcessor());
         processorMap.put(Constants.ExcelFile.AtadjSheet, new AtadjProcessor());
         processorMap.put(Constants.ExcelFile.ExempSheet, new ExempProcessor());
