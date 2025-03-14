@@ -3,7 +3,7 @@ package org.manitech;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.manitech.forms.IntroForm;
-import org.manitech.service.ExcelConsolidator;
+import org.manitech.util.PomVersionReader;
 
 import javax.swing.*;
 
@@ -13,7 +13,8 @@ public class Trigger {
 
     public static void main(String[] args) throws Exception {
         logger.info("Starting trigger");
-        triggerForms();
+        String version = PomVersionReader.getVersion();
+        triggerForms(version);
         /*String folderPath = "Q:\\src\\intellij\\GstUtility\\src\\resources\\gst\\files\\";
         logger.info("Using path: " + folderPath);
         ExcelConsolidator consolidator = new ExcelConsolidator();
@@ -21,7 +22,7 @@ public class Trigger {
         logger.info("Completed");
     }
 
-    private static void triggerForms() {
+    private static void triggerForms(String version) {
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -33,7 +34,7 @@ public class Trigger {
             logger.error("Unable to set the look and feel", e);
         }
         SwingUtilities.invokeLater(() -> {
-            IntroForm form = new IntroForm();  // Replace with your form class name
+            IntroForm form = new IntroForm(version);  // Replace with your form class name
         });
     }
 }

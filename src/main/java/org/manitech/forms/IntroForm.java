@@ -13,19 +13,20 @@ public class IntroForm extends JFrame {
     private JLabel introLbl;
     private JLabel orgLbl;
 
-    public IntroForm() {
+    public IntroForm(String version) {
         setContentPane(contentPane);
         setSize(300, 250);
         setLocationRelativeTo(null);
         setUndecorated(true);
         setVisible(true);
-        Timer timer = new Timer(2000, new ActionListener() {
+        Timer timer = new Timer(5000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
                 new FileLocatorDlg();
             }
         });
+        orgLbl.setText(orgLbl.getText() + ", Version:" + version);
         timer.setRepeats(false);
         timer.start();
     }

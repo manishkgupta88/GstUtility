@@ -49,6 +49,12 @@
             <version>2.20.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-model</artifactId>
+            <version>3.9.6</version> <!-- Use the latest version -->
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -5,6 +5,7 @@ package org.manitech.util;
  */
 
 public interface Constants {
+    String DefaultJarVersion = "0.0.1";
 
     interface ExcelFile {
         int MaxSheets = 12;
