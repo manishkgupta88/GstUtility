@@ -3,6 +3,7 @@ package org.manitech;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.manitech.forms.IntroForm;
+import org.manitech.service.ExcelConsolidator;
 
 import javax.swing.*;
 
@@ -12,11 +13,11 @@ public class Trigger {
 
     public static void main(String[] args) throws Exception {
         logger.info("Starting trigger");
-        triggerForms();
-        /*String folderPath = "Q:\\src\\intellij\\GstUtility\\src\\resources\\gst\\files\\";
+        //triggerForms();
+        String folderPath = "Q:\\src\\intellij\\GstUtility\\src\\resources\\gst\\files\\";
         logger.info("Using path: " + folderPath);
         ExcelConsolidator consolidator = new ExcelConsolidator();
-        consolidator.consolidate(folderPath);*/
+        consolidator.consolidate(folderPath);
         logger.info("Completed");
     }
 

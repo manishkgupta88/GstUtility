@@ -26,7 +26,7 @@ public class Gst1ReportProcessor extends AbstractExcelProcessor {
         if (gstSheet == null || CollectionUtils.isEmpty(gstSheet.getRecords())) {
             return;
         }
-        logger.info("Updating the records");
+        logger.info("Updating the records for Gst Sheets");
         for (LinkedList<DataPair> record : gstSheet.getRecords()) {
             if (CollectionUtils.isEmpty(record)) {
                 continue;
