@@ -55,10 +55,22 @@ public abstract class AbstractItemProcessor extends AbstractExcelProcessor {
     }
 
     private String getRecordMapKey(LinkedList<DataPair> record) {
-        if (record.size() > 5) {
-            return (record.get(0).getValue() + ":" + record.get(5).getValue());
+        if (record == null || record.size() == 0 || record.get(0) == null) {
+            return "";
         }
-        return record.get(0).getValue();
+        String hsn = record.get(0).getValue();
+        if (hsn.startsWith("0")) {
+            hsn = hsn.substring(1);
+            record.get(0).setValue(hsn);
+        }
+        if (hsn.length() > 6) {
+            hsn = hsn.substring(0, 6);
+            record.get(0).setValue(hsn);
+        }
+        if (record.size() > 5) {
+            return (hsn + ":" + record.get(2).getValue() + ":" + record.get(5).getValue());
+        }
+        return hsn;
     }
 
     private void mergeRecordList(GstSheet sheet, Map<String, LinkedList<DataPair>> map) {
