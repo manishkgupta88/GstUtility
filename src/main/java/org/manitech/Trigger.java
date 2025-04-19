@@ -3,9 +3,11 @@ package org.manitech;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.manitech.forms.IntroForm;
+import org.manitech.util.Helper;
 import org.manitech.util.PomVersionReader;
 
 import javax.swing.*;
+import java.util.Date;
 
 
 public class Trigger {
@@ -14,7 +16,7 @@ public class Trigger {
     public static void main(String[] args) throws Exception {
         logger.info("Starting trigger");
         String version = PomVersionReader.getVersion();
-        triggerForms(version);
+        triggerForms(version.concat(".").concat(Helper.getDateString()));
         /*String folderPath = "Q:\\src\\intellij\\GstUtility\\src\\resources\\gst\\files\\";
         logger.info("Using path: " + folderPath);
         ExcelConsolidator consolidator = new ExcelConsolidator();

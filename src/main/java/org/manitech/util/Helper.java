@@ -7,6 +7,8 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.manitech.model.DataPair;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
@@ -56,5 +58,11 @@ public class Helper {
                 .collect(Collectors.toSet())
                 .size();
 
+    }
+
+    public static String getDateString() {
+        Date currentDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+        return dateFormat.format(currentDate);
     }
 }
